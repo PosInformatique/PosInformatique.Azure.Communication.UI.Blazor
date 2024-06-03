@@ -29,29 +29,34 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         }
 
         /// <summary>
-        /// <see cref="IJSRuntime"/> used to manage Microsoft CallComposite component.
+        /// Gets or sets the <see cref="IJSRuntime"/> used to manage Microsoft JS CallComposite component.
         /// </summary>
         [Inject]
         public IJSRuntime JSRuntime { get; set; } = default!;
 
         /// <summary>
-        /// Occurs when the call is ended.
+        /// Gets or sets a callback when the call is ended.
         /// </summary>
         [Parameter]
         public EventCallback<CallAdapterCallEndedEvent> OnCallEnded { get; set; }
 
         /// <summary>
-        /// Occurs when a participant join the call.
+        /// Gets or sets a callback when a participant join the call.
         /// </summary>
         [Parameter]
         public EventCallback<RemoteParticipantJoinedEvent> OnParticipantJoined { get; set; }
 
         /// <summary>
-        /// Occurs when a participant leave the call.
+        /// Gets or sets a callback when a participant leave the call.
         /// </summary>
         [Parameter]
         public EventCallback<RemoteParticipantLeftEvent> OnParticipantLeft { get; set; }
 
+        /// <summary>
+        /// Loads the composite component using the specified arguments.
+        /// </summary>
+        /// <param name="args">Parameters of the composite component.</param>
+        /// <returns>A <see cref="Task"/> of the asynchronous operation.</returns>
         public async Task LoadAsync(CallAdapterArgs args)
         {
             ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
@@ -61,6 +66,11 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
             await this.module!.InvokeVoidAsync("initialize", this.callContainer, args, this.callbackEvent.Reference);
         }
 
+        /// <summary>
+        /// Join an existing call.
+        /// </summary>
+        /// <param name="options">Options of the call.</param>
+        /// <returns>A <see cref="Task"/> of the asynchronous operation.</returns>
         public async Task JoinCallAsync(JoinCallOptions options)
         {
             ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
