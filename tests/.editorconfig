@@ -17,3 +17,8 @@ dotnet_diagnostic.SA1637.severity = warning
 dotnet_diagnostic.SA1638.severity = warning
 dotnet_diagnostic.SA1640.severity = warning
 dotnet_diagnostic.SA1641.severity = warning
+
+### Code analysis
+
+# CA1861: Avoid constant arrays as arguments
+dotnet_diagnostic.CA1861.severity = none
