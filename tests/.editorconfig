@@ -1,0 +1,19 @@
+﻿[*.cs]
+
+### Style Cop
+
+# Default severity for analyzer diagnostics with category 'StyleCop.CSharp.DocumentationRules'
+dotnet_analyzer_diagnostic.category-StyleCop.CSharp.DocumentationRules.severity = none
+
+# SA0001: XML comment analysis disabled
+dotnet_diagnostic.SA0001.severity = silent
+
+# Stylecop check the headers of the files.
+dotnet_diagnostic.SA1633.severity = warning
+dotnet_diagnostic.SA1634.severity = warning
+dotnet_diagnostic.SA1635.severity = warning
+dotnet_diagnostic.SA1636.severity = warning
+dotnet_diagnostic.SA1637.severity = warning
+dotnet_diagnostic.SA1638.severity = warning
+dotnet_diagnostic.SA1640.severity = warning
+dotnet_diagnostic.SA1641.severity = warning
