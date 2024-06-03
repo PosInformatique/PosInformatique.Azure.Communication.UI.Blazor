@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{73E898B6-D134-41AC-AB6A-31080EB3BD8D}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		CodeCoverage.runsettings = CodeCoverage.runsettings
 		Directory.Build.props = Directory.Build.props
 		Directory.Packages.props = Directory.Packages.props
 		LICENSE = LICENSE
