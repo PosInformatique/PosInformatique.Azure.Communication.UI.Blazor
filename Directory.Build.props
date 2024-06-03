@@ -22,7 +22,6 @@
     <NoWarn>$(NoWarn);SA0001</NoWarn>
 
     <!-- By default prefix all the assemblies name with PosInformatique.Azure -->
-    <AssemblyName>PosInformatique.Azure.$(MSBuildProjectName)</AssemblyName>
     <RootNamespace>PosInformatique.Azure.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
   </PropertyGroup>
 

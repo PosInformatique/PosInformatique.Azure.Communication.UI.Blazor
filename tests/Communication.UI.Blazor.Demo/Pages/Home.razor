@@ -1,0 +1,145 @@
+﻿@page "/"
+@inject IdentityManager IdentityManager
+
+<PageTitle>Calling</PageTitle>
+
+<h1>Calling</h1>
+
+<div>
+    <label for="userId">UserID</label>
+    <input type="text" id="userId" @bind="this.userId" />
+    <button @onclick="this.CreateUserAsync">Create new user</button>
+
+    <label for="groupIdLocator">Group ID (Locator)</label>
+    <input type="text" id="groupIdLocator" @bind="this.groupIdLocator" />
+
+    <label for="displayName">Display name</label>
+    <input type="text" id="displayName" @bind="this.displayName" />
+</div>
+
+<div>
+    <input type="checkbox" id="cameraButton" @bind="this.cameraButton" />
+    <label for="cameraButton">Camera button</label>
+
+    <input type="checkbox" id="devicesButton" @bind="this.devicesButton" />
+    <label for="devicesButton">Devices button</label>
+
+    <input type="checkbox" id="endCallButton" @bind="this.endCallButton" />
+    <label for="endCallButton">End call button</label>
+
+    <input type="checkbox" id="microphoneButton" @bind="this.microphoneButton" />
+    <label for="microphoneButton">Microphone button</label>
+
+    <input type="checkbox" id="moreButton" @bind="this.moreButton" />
+    <label for="moreButton">More button</label>
+
+    <input type="checkbox" id="participantsButton" @bind="this.participantsButton" />
+    <label for="participantsButton">Participants button</label>
+
+    <input type="checkbox" id="peopleButton" @bind="this.peopleButton" />
+    <label for="peopleButton">People button</label>
+
+    <input type="checkbox" id="raiseHandButton" @bind="this.raiseHandButton" />
+    <label for="raiseHandButton">Raise button</label>
+
+    <input type="checkbox" id="screenShareButton" @bind="this.screenShareButton" />
+    <label for="screenShareButton">Screen share button</label>
+</div>
+
+<div>
+    <button @onclick="this.LoadAsync" disabled="@this.DisableLoad">Load</button>
+</div>
+
+<CallComposite @ref="this.callComposite">
+
+</CallComposite>
+
+@code {
+    private CallComposite? callComposite;
+
+    private string userId;
+
+    private string groupIdLocator;
+
+    private string displayName;
+
+    private bool cameraButton;
+    private bool devicesButton;
+    private bool endCallButton;
+    private bool microphoneButton;
+    private bool moreButton;
+    private bool participantsButton;
+    private bool peopleButton;
+    private bool raiseHandButton;
+    private bool screenShareButton;
+
+    public Home()
+    {
+        this.userId = string.Empty;
+        this.groupIdLocator = "76FC6C87-2D4C-49C8-B909-7E3819A88621";
+        this.displayName = "John Doe";
+
+        this.cameraButton = true;
+        this.devicesButton = true;
+        this.endCallButton = true;
+        this.microphoneButton = true;
+        this.moreButton = true;
+        this.participantsButton = true;
+        this.peopleButton = true;
+        this.raiseHandButton = true;
+        this.screenShareButton = true;
+    }
+
+    public bool DisableLoad
+    {
+        get
+        {
+            if (string.IsNullOrWhiteSpace(this.userId))
+            {
+                return true;
+            }
+
+            if (string.IsNullOrWhiteSpace(this.groupIdLocator))
+            {
+                return true;
+            }
+
+            return false;
+        }
+    }
+
+    private async Task CreateUserAsync()
+    {
+        this.userId = await this.IdentityManager.CreateUserAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        var token = await this.IdentityManager.GetTokenAsync(this.userId);
+
+        var args = new CallAdapterArgs(
+            new UserIdentifier(this.userId),
+            new GroupCallLocator(this.groupIdLocator),
+            new TokenCredential(token))
+            {
+                DisplayName = this.displayName,
+                Options =
+                {
+                    CallControls =
+                    {
+                        CameraButton = this.cameraButton,
+                        DevicesButton = this.devicesButton,
+                        EndCallButton = this.endCallButton,
+                        MicrophoneButton = this.microphoneButton,
+                        MoreButton = this.moreButton,
+                        ParticipantsButton = this.participantsButton,
+                        PeopleButton = this.peopleButton,
+                        RaiseHandButton = this.raiseHandButton,
+                        ScreenShareButton = this.screenShareButton,
+                    }
+                }
+            };
+
+        await this.callComposite!.LoadAsync(args);
+    }
+}

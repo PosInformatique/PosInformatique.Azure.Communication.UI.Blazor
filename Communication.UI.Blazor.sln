@@ -22,13 +22,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{545F3956-E62
 		src\Directory.Build.props = src\Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Communication.UI.Blazor.Tests", "tests\Communication.UI.Blazor.Tests\Communication.UI.Blazor.Tests.csproj", "{531291B4-F715-4863-9AE9-ABFEDA378477}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Communication.UI.Blazor.Tests", "tests\Communication.UI.Blazor.Tests\Communication.UI.Blazor.Tests.csproj", "{531291B4-F715-4863-9AE9-ABFEDA378477}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{BA30637F-A11D-4821-99AC-D6DC85311D3C}"
 	ProjectSection(SolutionItems) = preProject
 		tests\.editorconfig = tests\.editorconfig
 		tests\Directory.Build.props = tests\Directory.Build.props
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Communication.UI.Blazor.Demo", "tests\Communication.UI.Blazor.Demo\Communication.UI.Blazor.Demo.csproj", "{0499E905-30D5-451E-BFAE-E900E8227075}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +46,10 @@ Global
 		{531291B4-F715-4863-9AE9-ABFEDA378477}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{531291B4-F715-4863-9AE9-ABFEDA378477}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{531291B4-F715-4863-9AE9-ABFEDA378477}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0499E905-30D5-451E-BFAE-E900E8227075}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0499E905-30D5-451E-BFAE-E900E8227075}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0499E905-30D5-451E-BFAE-E900E8227075}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0499E905-30D5-451E-BFAE-E900E8227075}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
