@@ -32,6 +32,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{BA30637F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Communication.UI.Blazor.Demo", "tests\Communication.UI.Blazor.Demo\Communication.UI.Blazor.Demo.csproj", "{0499E905-30D5-451E-BFAE-E900E8227075}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{8A9FB002-346C-4751-A00E-158921926CB6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", "{796792A1-0557-4BCF-832C-61A698C190DD}"
+	ProjectSection(SolutionItems) = preProject
+		docs\Components\CallComposite.md = docs\Components\CallComposite.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +64,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{545F3956-E624-4790-96F1-C5D6F1BE3F90} = {73E898B6-D134-41AC-AB6A-31080EB3BD8D}
 		{BA30637F-A11D-4821-99AC-D6DC85311D3C} = {73E898B6-D134-41AC-AB6A-31080EB3BD8D}
+		{8A9FB002-346C-4751-A00E-158921926CB6} = {73E898B6-D134-41AC-AB6A-31080EB3BD8D}
+		{796792A1-0557-4BCF-832C-61A698C190DD} = {8A9FB002-346C-4751-A00E-158921926CB6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {31146DB5-C3BB-4ACA-ADE6-07E17986964F}
