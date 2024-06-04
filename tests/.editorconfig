@@ -20,5 +20,8 @@ dotnet_diagnostic.SA1641.severity = warning
 
 ### Code analysis
 
+# BL0005: Component parameter should not be set outside of its component.
+dotnet_diagnostic.BL0005.severity = none
+
 # CA1861: Avoid constant arrays as arguments
 dotnet_diagnostic.CA1861.severity = none
