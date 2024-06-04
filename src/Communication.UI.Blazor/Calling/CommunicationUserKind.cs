@@ -7,7 +7,7 @@
 namespace PosInformatique.Azure.Communication.UI.Blazor
 {
     /// <summary>
-    /// Represents a standard user for Azure Communication Service.
+    /// Represents a standard user for Azure Communication Services.
     /// </summary>
     public class CommunicationUserKind : CommunicationUserIdentifier
     {

@@ -16,14 +16,14 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         /// <summary>
         /// Initializes a new instance of the <see cref="TokenCredential"/> class.
         /// </summary>
-        /// <param name="token">The user token used to connect to the Azure Communication Service.</param>
+        /// <param name="token">The user token used to connect to the Azure Communication Services.</param>
         public TokenCredential(string token)
         {
             this.Token = token;
         }
 
         /// <summary>
-        /// Gets the user token used to connect to the Azure Communication Service.
+        /// Gets the user token used to connect to the Azure Communication Services.
         /// </summary>
         [JsonPropertyName("token")]
         [JsonPropertyOrder(1)]

@@ -53,6 +53,12 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         public EventCallback<RemoteParticipantLeftEvent> OnParticipantLeft { get; set; }
 
         /// <summary>
+        /// Gets a value indicating whether if the component has been loaded with the <see cref="LoadAsync(CallAdapterArgs)"/>
+        /// method.
+        /// </summary>
+        public bool IsLoaded { get; private set; }
+
+        /// <summary>
         /// Loads the composite component using the specified arguments.
         /// </summary>
         /// <param name="args">Parameters of the composite component.</param>
@@ -64,6 +70,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
             await this.EnsureModuleLoadAsync();
 
             await this.module!.InvokeVoidAsync("initialize", this.callContainer, args, this.callbackEvent.Reference);
+
+            this.IsLoaded = true;
         }
 
         /// <summary>
@@ -71,9 +79,15 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         /// </summary>
         /// <param name="options">Options of the call.</param>
         /// <returns>A <see cref="Task"/> of the asynchronous operation.</returns>
+        /// <exception cref="InvalidOperationException">If the component has not been loaded.</exception>
         public async Task JoinCallAsync(JoinCallOptions options)
         {
             ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
+
+            if (!this.IsLoaded)
+            {
+                throw new InvalidOperationException("The component has not been loaded. Ensures that the LoadAsync() method has been called first.");
+            }
 
             await this.EnsureModuleLoadAsync();
 
