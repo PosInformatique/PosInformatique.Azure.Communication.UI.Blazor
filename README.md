@@ -8,6 +8,10 @@ library contains some basic and composites components which use
 [Azure Communication Services](https://azure.microsoft.com/fr-fr/products/communication-services) for Chat and Calling
 features.
 
+The API of the library try to match as much as possible the
+[Azure Communication Services UI Library API](https://azure.github.io/communication-ui-library/?path=/story/overview--page)
+with the concept of [composite adapters](https://azure.github.io/communication-ui-library/?path=/docs/composite-adapters--page).
+
 ## Demo project
 Do not hesitate to run the [tests/Communication.UI.Blazor.Demo](./tests/Communication.UI.Blazor.Demo)
 application which contains an example usage of the

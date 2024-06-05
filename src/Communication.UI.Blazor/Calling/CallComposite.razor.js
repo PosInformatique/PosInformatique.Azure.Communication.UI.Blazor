@@ -7,11 +7,11 @@
     initializeIcons,
 } from '/_content/PosInformatique.Azure.Communication.UI.Blazor/azure-communication-react-bundle.js'
 
-export async function initialize(divElement, args, eventCallback) {
+initializeIcons(undefined, { disableWarnings: true });
 
-    initializeIcons(undefined, { disableWarnings: true });
+export async function createCallAdapter(referenceId, args, eventCallback) {
 
-    divElement.adapter = await createAzureCommunicationCallAdapter({
+    var adapter = await createAzureCommunicationCallAdapter({
         userId: args.userId,
         displayName: args.displayName,
         credential: new AzureCommunicationTokenCredential(args.credential.token),
@@ -19,30 +19,70 @@ export async function initialize(divElement, args, eventCallback) {
         options: args.options
     });
 
-    createRoot(divElement).render(createElement(CallComposite, { ...args, adapter: divElement.adapter }, null));
 
-    divElement.adapter.on('callEnded', (event) => {
+    adapter.on('callEnded', (event) => {
         return eventCallback.invokeMethodAsync('OnCallEndedAsync', event);
     });
 
-    divElement.adapter.on('participantsJoined', (event) => {
+    adapter.on('participantsJoined', (event) => {
         return eventCallback.invokeMethodAsync('OnParticipantsJoinedAsync', event.joined.map(createRemoteParticipant));
     });
 
-    divElement.adapter.on('participantsLeft', (event) => {
+    adapter.on('participantsLeft', (event) => {
         return eventCallback.invokeMethodAsync('OnParticipantsLeftAsync', event.removed.map(createRemoteParticipant));
     });
+
+    registerAdapter(referenceId, adapter);
 }
 
-export function adapterJoinCall(divElement, options) {
-    divElement.adapter.joinCall(options);
+export function initializeControl(referenceId, divElement) {
+
+    var adapter = getAdapter(referenceId);
+
+    if (typeof divElement.adapter != "undefined") {
+        if (divElement.adapter == adapter) {
+            return;
+        }
+
+        dispose(divElement);
+    }
+
+    divElement.adapter = getAdapter(referenceId);
+
+    createRoot(divElement).render(createElement(CallComposite, { adapter: divElement.adapter }, null));
 }
 
-export function dispose(divElement) {
+export function adapterJoinCall(referenceId, options) {
+
+    const adapter = getAdapter(referenceId);
+
+    adapter.joinCall(options);
+}
+
+export function dispose(referenceId) {
+
+    const adapter = getAdapter(referenceId);
+
     if (divElement.adapter != null) {
-        divElement.adapter.dispose();
         divElement.adapter = null;
     }
+
+    adapter.dispose();
+
+    delete window.__posInfo_azure_comm_ui_blazor[referenceId];
+}
+
+function getAdapter(referenceId) {
+    return window.__posInfo_azure_comm_ui_blazor[referenceId];
+}
+
+function registerAdapter(referenceId, adapter) {
+
+    if (typeof window.__posInfo_azure_comm_ui_blazor == "undefined") {
+        window.__posInfo_azure_comm_ui_blazor = {};
+    }
+
+    window.__posInfo_azure_comm_ui_blazor[referenceId] = adapter;
 }
 
 function createRemoteParticipant(remoteParticipant) {

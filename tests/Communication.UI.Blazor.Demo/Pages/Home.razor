@@ -1,5 +1,7 @@
 ﻿@page "/"
 @inject IdentityManager IdentityManager
+@inject ICallingService CallingService
+@implements IAsyncDisposable
 
 <PageTitle>Calling</PageTitle>
 
@@ -51,12 +53,7 @@
     <button @onclick="this.JoinCallAsync" disabled="@this.DisableLoad">Join call</button>
 </div>
 
-<CallComposite @ref="this.callComposite"
-               OnCallEnded="this.OnCallEnded"
-               OnParticipantJoined="this.OnParticipantJoined"
-               OnParticipantLeft="this.OnParticipantLeft">
-
-</CallComposite>
+<CallComposite Adapter="this.callAdapter" />
 
 <div>
     <p>
@@ -67,8 +64,9 @@
     </p>
 </div>
 
-@code {
-    private CallComposite? callComposite;
+@code
+{
+    private CallAdapter? callAdapter;
 
     private string userId;
 
@@ -105,6 +103,16 @@
         this.screenShareButton = true;
 
         this.log = new List<string>();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (this.callAdapter is not null)
+        {
+            await this.callAdapter.DisposeAsync();
+
+            this.callAdapter = null;
+        }
     }
 
     public bool DisableLoad
@@ -157,7 +165,11 @@
                 }
             };
 
-        await this.callComposite!.LoadAsync(args);
+        this.callAdapter = await this.CallingService.CreateAdapterAsync(args);
+
+        this.callAdapter.OnCallEnded += this.OnCallEnded;
+        this.callAdapter.OnParticipantJoined += this.OnParticipantJoined;
+        this.callAdapter.OnParticipantLeft += this.OnParticipantLeft;
     }
 
     private async Task JoinCallAsync()
@@ -168,22 +180,28 @@
             MicrophoneOn = true,
         };
 
-        await this.callComposite!.JoinCallAsync(options);
+        await this.callAdapter!.JoinCallAsync(options);
     }
 
-    private void OnCallEnded()
+    private async Task OnCallEnded(CallAdapterCallEndedEvent @event)
     {
         this.Log("Call ended");
+
+        await Task.CompletedTask;
     }
 
-    private void OnParticipantJoined(RemoteParticipantJoinedEvent @event)
+    private async Task OnParticipantJoined(RemoteParticipantJoinedEvent @event)
     {
         this.Log($"{@event.Participant.DisplayName} has join the call. (ID: {@event.Participant.Identifier.CommunicationUserId})");
+
+        await Task.CompletedTask;
     }
 
-    private void OnParticipantLeft(RemoteParticipantLeftEvent @event)
+    private async Task OnParticipantLeft(RemoteParticipantLeftEvent @event)
     {
         this.Log($"{@event.Participant.DisplayName} has left the call. (ID: {@event.Participant.Identifier.CommunicationUserId})");
+
+        await Task.CompletedTask;
     }
 
     private void Log(string message)

@@ -8,22 +8,26 @@ This component is a wrapper of the
 library.
 
 To use the component:
-- Add the `CallComposite` component.
-- Define a reference to the component which allows to call the `LoadAsync()`
-method to load the component with the token and ID of the Azure Communication Services to use.
+- Register required services by calling the `AddCalling()` method in the main entry of the Blazor application.
+
+```csharp
+builder.Services.AddCalling();
+```
+
+- Inject the `ICallingService` dependency a use it to create an instance of `CallAdapter`.
+- Add the `CallComposite` component and bind the `Adapter` property with the `CallAdapter` previously created.
 
 Example:
 ```razor
-<CallComposite @ref="this.callComposite"
-               OnCallEnded="this.OnCallEnded"
-               OnParticipantJoined="this.OnParticipantJoined"
-               OnParticipantLeft="this.OnParticipantLeft">
-</CallComposite>
+@inject ICallingService CallingService
+
+<CallComposite Adapter="this.callAdapter" />
 
 <button @onclick="this.LoadAsync">Load</button>
 
-@{
-    private CallComposite? callComposite;
+@code
+{
+    private CallAdapter? callAdapter;
 
     private async Task LoadAsync()
     {
@@ -50,15 +54,23 @@ Example:
                 }
             };
 
-        await this.callComposite!.LoadAsync(args);
+        this.callAdapter = await this.CallingService.CreateAdapterAsync(args);
+
+        this.callAdapter.OnCallEnded += this.OnCallEnded;
+        this.callAdapter.OnParticipantJoined += this.OnParticipantJoined;
+        this.callAdapter.OnParticipantLeft += this.OnParticipantLeft;
     }
 }
 ```
 
+You can manage the `CallComposite` component using the `CallAdapter` associated. For example, you can
+subscribe to different events using a simple delegate.
+
 ### Join the call
-After the component has been loaded (or after leaving a call), it is possible to join the call
-by calling the `JoinCall()` method. You can define if the camera and/or the microphone have to be
-activated.
+After the `CallAdapter` has been associated to the `CallComposite` component
+(or after leaving a call), it is possible to join the call
+by calling the `JoinCall()` method on the `CallAdapter`.
+You can define if the camera and/or the microphone have to be activated.
 
 ```csharp
 private async Task JoinCallAsync()
@@ -69,12 +81,16 @@ private async Task JoinCallAsync()
         MicrophoneOn = true,
     };
 
-    await this.callComposite!.JoinCallAsync(options);
+    await this.callAdapter!.JoinCallAsync(options);
 }
 ```
 
 ### Events
-You can subsribe to the following events:
+You can subsribe to the following asynchronous events using a standard delegate method:
 - `OnCallEnded`: Occurs then the call is ended.
 - `OnParticipantJoined`: Occurs when a participant join the call.
 - `OnParticipantLeft`: Occurs when a participant leave the call.
+
+### Dispose the resources
+It is recommanded to implement the `IAsyncDisposable` method in the class which create
+and manage the `CallAdapter` instance.
