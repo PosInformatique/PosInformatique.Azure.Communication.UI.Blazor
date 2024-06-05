@@ -32,6 +32,14 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
                 .Should().ThrowExactlyAsync<ObjectDisposedException>()
                 .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
 
+            await callAdapter.Invoking(c => c.MuteAsync())
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
+
+            await callAdapter.Invoking(c => c.UnmuteAsync())
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
+
             module.VerifyAll();
         }
 
@@ -165,6 +173,68 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
             adapter.Dispose();
 
             await adapter.Invoking(c => c.JoinCallAsync(default))
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
+        }
+
+        [Fact]
+        public async Task MuteAsync()
+        {
+            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
+            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("adapterMute", It.IsAny<object[]>()))
+                .Callback((string _, object[] a) =>
+                {
+                    a.Should().HaveCount(1);
+                    a[0].As<Guid>().Should().NotBeEmpty();
+                })
+                .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
+
+            var adapter = new CallAdapter(module.Object);
+
+            await adapter.MuteAsync();
+
+            module.VerifyAll();
+        }
+
+        [Fact]
+        public async Task MuteAsync_AlreadyDisposed()
+        {
+            var adapter = new CallAdapter(default);
+
+            adapter.Dispose();
+
+            await adapter.Invoking(c => c.MuteAsync())
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
+        }
+
+        [Fact]
+        public async Task UnmuteAsync()
+        {
+            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
+            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("adapterUnmute", It.IsAny<object[]>()))
+                .Callback((string _, object[] a) =>
+                {
+                    a.Should().HaveCount(1);
+                    a[0].As<Guid>().Should().NotBeEmpty();
+                })
+                .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
+
+            var adapter = new CallAdapter(module.Object);
+
+            await adapter.UnmuteAsync();
+
+            module.VerifyAll();
+        }
+
+        [Fact]
+        public async Task UnmuteAsync_AlreadyDisposed()
+        {
+            var adapter = new CallAdapter(default);
+
+            adapter.Dispose();
+
+            await adapter.Invoking(c => c.UnmuteAsync())
                 .Should().ThrowExactlyAsync<ObjectDisposedException>()
                 .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
         }

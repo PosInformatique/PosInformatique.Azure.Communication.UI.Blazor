@@ -50,13 +50,37 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         /// Join an existing call.
         /// </summary>
         /// <param name="options">Options of the call.</param>
-        /// <returns>A <see cref="Task"/> of the asynchronous operation.</returns>
-        /// <exception cref="InvalidOperationException">If the component has not been loaded.</exception>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous invocation.</returns>
+        /// <exception cref="ObjectDisposedException">If the <see cref="CallAdapter"/> has already been disposed.</exception>
         public async Task JoinCallAsync(JoinCallOptions options)
         {
             ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
 
             await this.module.InvokeVoidAsync("adapterJoinCall", this.referenceId, options);
+        }
+
+        /// <summary>
+        /// Mute the current user during the call or disable microphone locally.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous invocation.</returns>
+        /// <exception cref="ObjectDisposedException">If the <see cref="CallAdapter"/> has already been disposed.</exception>
+        public async Task MuteAsync()
+        {
+            ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
+
+            await this.module.InvokeVoidAsync("adapterMute", this.referenceId);
+        }
+
+        /// <summary>
+        /// Unmute the current user during the call or enable microphone locally.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous invocation.</returns>
+        /// <exception cref="ObjectDisposedException">If the <see cref="CallAdapter"/> has already been disposed.</exception>
+        public async Task UnmuteAsync()
+        {
+            ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
+
+            await this.module.InvokeVoidAsync("adapterUnmute", this.referenceId);
         }
 
         /// <inheritdoc />

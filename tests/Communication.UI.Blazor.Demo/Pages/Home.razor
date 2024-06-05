@@ -53,6 +53,11 @@
     <button @onclick="this.JoinCallAsync" disabled="@this.DisableLoad">Join call</button>
 </div>
 
+<div>
+    <button @onclick="this.MuteAsync" disabled="@(this.callAdapter is null)">Mute</button>
+    <button @onclick="this.UnmuteAsync" disabled="@(this.callAdapter is null)">Unmute</button>
+</div>
+
 <CallComposite Adapter="this.callAdapter" />
 
 <div>
@@ -170,6 +175,16 @@
         this.callAdapter.OnCallEnded += this.OnCallEnded;
         this.callAdapter.OnParticipantJoined += this.OnParticipantJoined;
         this.callAdapter.OnParticipantLeft += this.OnParticipantLeft;
+    }
+
+    private async Task MuteAsync()
+    {
+        await this.callAdapter!.MuteAsync();
+    }
+
+    private async Task UnmuteAsync()
+    {
+        await this.callAdapter!.UnmuteAsync();
     }
 
     private async Task JoinCallAsync()

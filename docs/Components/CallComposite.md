@@ -85,6 +85,11 @@ private async Task JoinCallAsync()
 }
 ```
 
+### Mute/Unmute
+To mute the microphone of the current user, call the `MuteAsync()` method on the `CallAdapter`.
+
+To mute the microphone of the current user, call the `UnmuteAsync()` method on the `CallAdapter`.
+
 ### Events
 You can subsribe to the following asynchronous events using a standard delegate method:
 - `OnCallEnded`: Occurs then the call is ended.

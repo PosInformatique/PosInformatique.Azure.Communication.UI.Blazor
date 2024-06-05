@@ -59,6 +59,20 @@ export function adapterJoinCall(referenceId, options) {
     adapter.joinCall(options);
 }
 
+export async function adapterMute(referenceId) {
+
+    const adapter = getAdapter(referenceId);
+
+    await adapter.mute();
+}
+
+export async function adapterUnmute(referenceId) {
+
+    const adapter = getAdapter(referenceId);
+
+    await adapter.unmute();
+}
+
 export function dispose(referenceId) {
 
     const adapter = getAdapter(referenceId);
