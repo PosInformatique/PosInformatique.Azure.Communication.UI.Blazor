@@ -9,7 +9,7 @@
 
 initializeIcons(undefined, { disableWarnings: true });
 
-export async function createCallAdapter(referenceId, args, eventCallback) {
+export async function createCallAdapter(id, args, eventCallback) {
 
     var adapter = await createAzureCommunicationCallAdapter({
         userId: args.userId,
@@ -32,12 +32,12 @@ export async function createCallAdapter(referenceId, args, eventCallback) {
         return eventCallback.invokeMethodAsync('OnParticipantsLeftAsync', event.removed.map(createRemoteParticipant));
     });
 
-    registerAdapter(referenceId, adapter);
+    registerAdapter(id, adapter);
 }
 
-export function initializeControl(referenceId, divElement) {
+export function initializeControl(id, divElement) {
 
-    var adapter = getAdapter(referenceId);
+    var adapter = getAdapter(id);
 
     if (typeof divElement.adapter != "undefined") {
         if (divElement.adapter == adapter) {
@@ -47,35 +47,35 @@ export function initializeControl(referenceId, divElement) {
         dispose(divElement);
     }
 
-    divElement.adapter = getAdapter(referenceId);
+    divElement.adapter = getAdapter(id);
 
     createRoot(divElement).render(createElement(CallComposite, { adapter: divElement.adapter }, null));
 }
 
-export function adapterJoinCall(referenceId, options) {
+export function adapterJoinCall(id, options) {
 
-    const adapter = getAdapter(referenceId);
+    const adapter = getAdapter(id);
 
     adapter.joinCall(options);
 }
 
-export async function adapterMute(referenceId) {
+export async function adapterMute(id) {
 
-    const adapter = getAdapter(referenceId);
+    const adapter = getAdapter(id);
 
     await adapter.mute();
 }
 
-export async function adapterUnmute(referenceId) {
+export async function adapterUnmute(id) {
 
-    const adapter = getAdapter(referenceId);
+    const adapter = getAdapter(id);
 
     await adapter.unmute();
 }
 
-export function dispose(referenceId) {
+export function dispose(id) {
 
-    const adapter = getAdapter(referenceId);
+    const adapter = getAdapter(id);
 
     if (divElement.adapter != null) {
         divElement.adapter = null;
@@ -83,20 +83,20 @@ export function dispose(referenceId) {
 
     adapter.dispose();
 
-    delete window.__posInfo_azure_comm_ui_blazor[referenceId];
+    delete window.__posInfo_azure_comm_ui_blazor[id];
 }
 
-function getAdapter(referenceId) {
-    return window.__posInfo_azure_comm_ui_blazor[referenceId];
+function getAdapter(id) {
+    return window.__posInfo_azure_comm_ui_blazor[id];
 }
 
-function registerAdapter(referenceId, adapter) {
+function registerAdapter(id, adapter) {
 
     if (typeof window.__posInfo_azure_comm_ui_blazor == "undefined") {
         window.__posInfo_azure_comm_ui_blazor = {};
     }
 
-    window.__posInfo_azure_comm_ui_blazor[referenceId] = adapter;
+    window.__posInfo_azure_comm_ui_blazor[id] = adapter;
 }
 
 function createRemoteParticipant(remoteParticipant) {
