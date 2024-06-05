@@ -61,6 +61,7 @@
 <CallComposite Adapter="this.callAdapter" />
 
 <div>
+    <p>Logs (Using events):</p>
     <p>
         @foreach (var message in this.log)
         {
@@ -200,7 +201,7 @@
 
     private async Task OnCallEnded(CallAdapterCallEndedEvent @event)
     {
-        this.Log("Call ended");
+        this.Log($"Call ended (CallId: {@event.CallId})");
 
         await Task.CompletedTask;
     }
@@ -222,5 +223,7 @@
     private void Log(string message)
     {
         this.log.Add(message);
+
+        this.StateHasChanged();
     }
 }
