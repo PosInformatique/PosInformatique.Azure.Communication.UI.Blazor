@@ -1,0 +1,73 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <AssemblyName>PosInformatique.Azure.$(MSBuildProjectName)</AssemblyName>
+    <IsPackable>true</IsPackable>
+
+    <Description>Azure Communication Services UI Library for Blazor.</Description>
+    <PackageIcon>Icon.png</PackageIcon>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/PosInformatique/PosInformatique.Azure.Communication.UI.Blazor</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>
+      1.0.0
+      - Initial version with the CallComposite component.
+    </PackageReleaseNotes>
+    <PackageTags>azure communication ui blazor acs azure-communication-services javascript js</PackageTags>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <_AzureCommunicationReactBundleFileName>azure-communication-react-bundle.js</_AzureCommunicationReactBundleFileName>
+    <_AzureCommunicationReactBundleOutputPath>wwwroot/</_AzureCommunicationReactBundleOutputPath>
+    <_AzureCommunicationReactBundleInputPath>AzureCommunicationReact/</_AzureCommunicationReactBundleInputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <_AzureCommunicationReactBundleInputs Include="$(_AzureCommunicationReactBundleInputPath)**/*.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Remove="..\..\stylecop.json" />
+    <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    <None Include="Icon.png" Pack="true" PackagePath="" />
+    <None Include="..\..\LICENSE" Pack="true" PackagePath=""/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="AzureCommunicationReact\package-lock.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+    <Content Update="AzureCommunicationReact\package.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <Target Name="BuildAzureCommunicationReactBundle" BeforeTargets="BeforeBuild" Inputs="@(_AzureCommunicationReactBundleInputs)" Outputs="$(_AzureCommunicationReactBundleOutputPath)$(_AzureCommunicationReactBundleFileName)" Condition="!Exists('wwwroot/$(_AzureCommunicationReactBundleFileName)')">
+
+    <Exec Command="npm install" WorkingDirectory="$(_AzureCommunicationReactBundleInputPath)" />
+
+    <Exec Command="npm run build" WorkingDirectory="$(_AzureCommunicationReactBundleInputPath)" EnvironmentVariables="AZURE_COMMUNICATION_REACT_BUNDLE_OUTPUT_PATH=$(_AzureCommunicationReactBundleOutputPath);AZURE_COMMUNICATION_REACT_BUNDLE_FILE_NAME=$(_AzureCommunicationReactBundleFileName)" />
+
+    <ItemGroup>
+      <Content Include="$(_AzureCommunicationReactBundleOutputPath)$(_AzureCommunicationReactBundleFileName)" />
+    </ItemGroup>
+  </Target>
+
+</Project>
