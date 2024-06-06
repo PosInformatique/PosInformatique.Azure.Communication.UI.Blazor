@@ -7,7 +7,7 @@
 namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
 {
     using System.Collections.Generic;
-    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Components;
 
     public partial class Home
     {
@@ -52,6 +52,9 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
             this.log = [];
         }
 
+        [Inject]
+        public IConfiguration Configuration { get; set; } = default!;
+
         public bool DisableLoad
         {
             get
@@ -80,6 +83,14 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
             }
 
             GC.SuppressFinalize(this);
+        }
+
+        protected override void OnInitialized()
+        {
+            if (!string.IsNullOrWhiteSpace(this.Configuration["DEBUG_DEFAULT_USERID"]))
+            {
+                this.userId = this.Configuration["DEBUG_DEFAULT_USERID"]!;
+            }
         }
 
         private async Task CreateUserAsync()
