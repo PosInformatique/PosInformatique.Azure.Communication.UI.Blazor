@@ -60,6 +60,19 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         }
 
         /// <summary>
+        /// Leave the call.
+        /// </summary>
+        /// <param name="forEveryone">Whether to remove all participants when leaving</param>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous invocation.</returns>
+        /// <exception cref="ObjectDisposedException">If the <see cref="CallAdapter"/> has already been disposed.</exception>
+        public async Task LeaveCallAsync(bool forEveryone)
+        {
+            ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
+
+            await this.module.InvokeVoidAsync("adapterLeaveCall", this.id, forEveryone);
+        }
+
+        /// <summary>
         /// Mute the current user during the call or disable microphone locally.
         /// </summary>
         /// <returns>A <see cref="Task"/> that represents the asynchronous invocation.</returns>

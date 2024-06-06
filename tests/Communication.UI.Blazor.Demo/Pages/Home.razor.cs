@@ -29,6 +29,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
         private bool raiseHandButton;
         private bool screenShareButton;
 
+        private bool leaveCallForEveryone;
+
         private List<string> log;
 
         public Home()
@@ -146,6 +148,11 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
             };
 
             await this.callAdapter!.JoinCallAsync(options);
+        }
+
+        private async Task LeaveCallAsync()
+        {
+            await this.callAdapter!.LeaveCallAsync(this.leaveCallForEveryone);
         }
 
         private async Task OnCallEnded(CallAdapterCallEndedEvent @event)

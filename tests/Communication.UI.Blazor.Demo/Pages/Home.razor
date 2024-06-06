@@ -50,7 +50,10 @@
 
 <div>
     <button @onclick="this.LoadAsync" disabled="@this.DisableLoad">Load</button>
-    <button @onclick="this.JoinCallAsync" disabled="@this.DisableLoad">Join call</button>
+    <button @onclick="this.JoinCallAsync" disabled="@(this.callAdapter is null)">Join call</button>
+    <button @onclick="this.LeaveCallAsync" disabled="@(this.callAdapter is null)">Leave call</button>
+    <input type="checkbox" id="leaveCallForEveryone" @bind="this.leaveCallForEveryone" />
+    <label for="leaveCallForEveryone">Leave call for everyone</label>
 
     <button @onclick="this.MuteAsync" disabled="@(this.callAdapter is null)">Mute</button>
     <button @onclick="this.UnmuteAsync" disabled="@(this.callAdapter is null)">Unmute</button>

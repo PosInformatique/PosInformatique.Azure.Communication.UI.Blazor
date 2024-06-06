@@ -66,7 +66,7 @@ Example:
 You can manage the `CallComposite` component using the `CallAdapter` associated. For example, you can
 subscribe to different events using a simple delegate.
 
-### Join the call
+### Join/Leave the call
 After the `CallAdapter` has been associated to the `CallComposite` component
 (or after leaving a call), it is possible to join the call
 by calling the `JoinCall()` method on the `CallAdapter`.
@@ -84,6 +84,9 @@ private async Task JoinCallAsync()
     await this.callAdapter!.JoinCallAsync(options);
 }
 ```
+
+To leave the call, call the `LeaveCallAsync()` method on the `CallAdapter`. This method
+take a boolean parameter `forEveryone` to remove all participants when leaving.
 
 ### Start/Stop screen share
 To start sharing the screen on the current device, call the `StartScreenShare()` method on the `CallAdapter`.

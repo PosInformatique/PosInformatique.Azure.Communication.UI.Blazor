@@ -17,6 +17,7 @@ which has been ported to this library.
 | holdCall (Beta)               | No         | Currently in beta                                    |
 | joinCall (Deprecated)         | No         | Deprecated                                           |
 | joinCall                      | Partially  | Need to wrap the Call returned object                |
+| leaveCall                     | **Done**   |                                                      |
 | resumeCall (Beta)             | No         | Currently in beta                                    |
 | startCamera                   | TODO       |                                                      |
 | stopCamera                    | TODO       |                                                      |

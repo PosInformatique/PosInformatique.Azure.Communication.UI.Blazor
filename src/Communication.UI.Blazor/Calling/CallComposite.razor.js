@@ -59,6 +59,13 @@ export function adapterJoinCall(id, options) {
     adapter.joinCall(options);
 }
 
+export function adapterLeaveCall(id, forEveryone) {
+
+    const adapter = getAdapter(id);
+
+    adapter.leaveCall(forEveryone);
+}
+
 export async function adapterMute(id) {
 
     const adapter = getAdapter(id);

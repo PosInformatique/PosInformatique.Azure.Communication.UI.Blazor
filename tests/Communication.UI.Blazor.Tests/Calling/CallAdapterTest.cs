@@ -178,6 +178,40 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
         }
 
         [Fact]
+        public async Task LeaveCallAsyncAsync()
+        {
+            var options = new JoinCallOptions();
+
+            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
+            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("adapterLeaveCall", It.IsAny<object[]>()))
+                .Callback((string _, object[] a) =>
+                {
+                    a.Should().HaveCount(2);
+                    a[0].As<Guid>().Should().NotBeEmpty();
+                    a[1].Should().Be(true);
+                })
+                .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
+
+            var adapter = new CallAdapter(module.Object);
+
+            await adapter.LeaveCallAsync(true);
+
+            module.VerifyAll();
+        }
+
+        [Fact]
+        public async Task LeaveAsync_AlreadyDisposed()
+        {
+            var adapter = new CallAdapter(default);
+
+            adapter.Dispose();
+
+            await adapter.Invoking(c => c.LeaveCallAsync(default))
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
+        }
+
+        [Fact]
         public async Task MuteAsync()
         {
             var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
