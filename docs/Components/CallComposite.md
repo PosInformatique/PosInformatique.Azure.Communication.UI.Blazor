@@ -14,8 +14,8 @@ To use the component:
 builder.Services.AddCalling();
 ```
 
-- Inject the `ICallingService` dependency a use it to create an instance of `ICallAdapter`.
-- Add the `CallComposite` component and bind the `Adapter` property with the `ICallAdapter` previously created.
+- Inject the `ICallingService` dependency a use it to create an instance of `CallAdapter`.
+- Add the `CallComposite` component and bind the `Adapter` property with the `CallAdapter` previously created.
 
 Example:
 ```razor
@@ -27,7 +27,7 @@ Example:
 
 @code
 {
-    private ICallAdapter? callAdapter;
+    private CallAdapter? callAdapter;
 
     private async Task LoadAsync()
     {
@@ -63,13 +63,13 @@ Example:
 }
 ```
 
-You can manage the `CallComposite` component using the `ICallAdapter` associated. For example, you can
+You can manage the `CallComposite` component using the `CallAdapter` associated. For example, you can
 subscribe to different events using a simple delegate.
 
 ### Join/Leave the call
-After the `ICallAdapter` has been associated to the `CallComposite` component
+After the `CallAdapter` has been associated to the `CallComposite` component
 (or after leaving a call), it is possible to join the call
-by calling the `JoinCall()` method on the `ICallAdapter`.
+by calling the `JoinCall()` method on the `CallAdapter`.
 You can define if the camera and/or the microphone have to be activated.
 
 ```csharp
@@ -85,18 +85,18 @@ private async Task JoinCallAsync()
 }
 ```
 
-To leave the call, call the `LeaveCallAsync()` method on the `ICallAdapter`. This method
+To leave the call, call the `LeaveCallAsync()` method on the `CallAdapter`. This method
 take a boolean parameter `forEveryone` to remove all participants when leaving.
 
 ### Start/Stop screen share
-To start sharing the screen on the current device, call the `StartScreenShare()` method on the `ICallAdapter`.
+To start sharing the screen on the current device, call the `StartScreenShare()` method on the `CallAdapter`.
 
-To stop sharing the screen on the current device, call the `StopScreenShare()` method on the `ICallAdapter`.
+To stop sharing the screen on the current device, call the `StopScreenShare()` method on the `CallAdapter`.
 
 ### Mute/Unmute
-To mute the microphone of the current user, call the `MuteAsync()` method on the `ICallAdapter`.
+To mute the microphone of the current user, call the `MuteAsync()` method on the `CallAdapter`.
 
-To unmute the microphone of the current user, call the `UnmuteAsync()` method on the `ICallAdapter`.
+To unmute the microphone of the current user, call the `UnmuteAsync()` method on the `CallAdapter`.
 
 ### Events
 You can subsribe to the following asynchronous events using a standard delegate method:
@@ -107,10 +107,4 @@ You can subsribe to the following asynchronous events using a standard delegate 
 
 ### Dispose the resources
 It is recommanded to implement the `IAsyncDisposable` method in the class which create
-and manage the `ICallAdapter` instance.
-
-### Unit tests
-The `ICallingService.CreateAdapterAsync()` method returns an instance of `ICallAdapter`
-implemented by the `CallAdapter`. By returning interface implementation, developers
-have no excuses to perform some units in their code by mocking the `ICallingService`
-and `ICallAdapter` interfaces.
+and manage the `CallAdapter` instance.

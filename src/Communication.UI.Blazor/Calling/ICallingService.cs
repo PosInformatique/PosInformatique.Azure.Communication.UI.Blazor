@@ -18,6 +18,6 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         /// <param name="args">Parameters of the <see cref="CallAdapter"/> to create.</param>
         /// <returns>A new instance of the <see cref="CallAdapter"/> which can be use by a <see cref="CallComposite"/> using the <see cref="CallComposite.Adapter"/>
         /// property.</returns>
-        Task<ICallAdapter> CreateAdapterAsync(CallAdapterArgs args);
+        Task<CallAdapter> CreateAdapterAsync(CallAdapterArgs args);
     }
 }

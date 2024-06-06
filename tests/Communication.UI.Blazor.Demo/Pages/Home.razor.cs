@@ -13,7 +13,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
     {
         private readonly List<string> log;
 
-        private ICallAdapter? callAdapter;
+        private CallAdapter? callAdapter;
 
         private string userId;
 
