@@ -12,7 +12,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
     /// Implementation of the <see cref="ICallingService"/> used to create instances
     /// of the <see cref="CallComposite"/>.
     /// </summary>
-    public class CallingService : ICallingService, IAsyncDisposable
+    public sealed class CallingService : ICallingService, IAsyncDisposable
     {
         private readonly IJSRuntime jsRuntime;
 

@@ -11,6 +11,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
 
     public partial class Home
     {
+        private readonly List<string> log;
+
         private CallAdapter? callAdapter;
 
         private string userId;
@@ -31,8 +33,6 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
 
         private bool leaveCallForEveryone;
 
-        private List<string> log;
-
         public Home()
         {
             this.userId = string.Empty;
@@ -49,7 +49,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
             this.raiseHandButton = true;
             this.screenShareButton = true;
 
-            this.log = new List<string>();
+            this.log = [];
         }
 
         public bool DisableLoad
@@ -78,6 +78,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
 
                 this.callAdapter = null;
             }
+
+            GC.SuppressFinalize(this);
         }
 
         private async Task CreateUserAsync()
