@@ -7,6 +7,7 @@
 namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
 {
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.JSInterop;
 
     public class CallingServiceCollectionExtensionsTest
     {
@@ -15,6 +16,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
         {
             var serviceCollection = new ServiceCollection();
 
+            serviceCollection.AddSingleton(sp => Mock.Of<IJSRuntime>());
             serviceCollection.AddCalling().Should().BeSameAs(serviceCollection);
 
             var sp = serviceCollection.BuildServiceProvider();
