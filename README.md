@@ -64,3 +64,7 @@ library.
 
 The library is based on the minimal ASP .NET Core Blazor version which is the 8.0.0 and
 can be used for the application based on this version or higher.
+
+## Ported APIs
+
+The list of the ported API is available in the [Ported API](./docs/PortedApi.md) page.
