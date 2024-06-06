@@ -32,6 +32,18 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
                 .Should().ThrowExactlyAsync<ObjectDisposedException>()
                 .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
 
+            await callAdapter.Invoking(c => c.LeaveCallAsync(default))
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
+
+            await callAdapter.Invoking(c => c.StartScreenShareAsync())
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
+
+            await callAdapter.Invoking(c => c.StopScreenShareAsync())
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
+
             await callAdapter.Invoking(c => c.MuteAsync())
                 .Should().ThrowExactlyAsync<ObjectDisposedException>()
                 .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
