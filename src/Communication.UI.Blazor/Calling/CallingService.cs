@@ -39,7 +39,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         }
 
         /// <inheritdoc />
-        public async Task<CallAdapter> CreateAdapterAsync(CallAdapterArgs args)
+        public async Task<ICallAdapter> CreateAdapterAsync(CallAdapterArgs args)
         {
             await this.EnsureModuleLoadAsync();
 

@@ -12,7 +12,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
     /// <summary>
     /// An adapter interface specific for Azure Communication identity which extends <see cref="CommonCallAdapter"/>.
     /// </summary>
-    public class CallAdapter : CommonCallAdapter, IDisposable, IAsyncDisposable
+    public class CallAdapter : CommonCallAdapter, ICallAdapter, IDisposable
     {
         private readonly Guid id;
 
@@ -31,32 +31,19 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
             this.callbackEvent = new CallbackEvent(this);
         }
 
-        /// <summary>
-        /// Occurs when the call is ended.
-        /// </summary>
+        /// <inheritdoc />
         public event AsyncEventHandler<CallEndedEvent>? OnCallEnded;
 
-        /// <summary>
-        /// Occurs when the microphone is muted/unmuted on a participant.
-        /// </summary>
+        /// <inheritdoc />
         public event AsyncEventHandler<MicrophoneMuteChangedEvent>? OnMicrophoneMuteChanged;
 
-        /// <summary>
-        /// Occurs when a participant join the call.
-        /// </summary>
+        /// <inheritdoc />
         public event AsyncEventHandler<RemoteParticipantJoinedEvent>? OnParticipantJoined;
 
-        /// <summary>
-        /// Occurs when a participant leave the call.
-        /// </summary>
+        /// <inheritdoc />
         public event AsyncEventHandler<RemoteParticipantLeftEvent>? OnParticipantLeft;
 
-        /// <summary>
-        /// Join an existing call.
-        /// </summary>
-        /// <param name="options">Options of the call.</param>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous invocation.</returns>
-        /// <exception cref="ObjectDisposedException">If the <see cref="CallAdapter"/> has already been disposed.</exception>
+        /// <inheritdoc />
         public async Task JoinCallAsync(JoinCallOptions options)
         {
             ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
@@ -64,12 +51,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
             await this.module.InvokeVoidAsync("adapterJoinCall", this.id, options);
         }
 
-        /// <summary>
-        /// Leave the call.
-        /// </summary>
-        /// <param name="forEveryone">Whether to remove all participants when leaving.</param>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous invocation.</returns>
-        /// <exception cref="ObjectDisposedException">If the <see cref="CallAdapter"/> has already been disposed.</exception>
+        /// <inheritdoc />
         public async Task LeaveCallAsync(bool forEveryone)
         {
             ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
@@ -77,11 +59,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
             await this.module.InvokeVoidAsync("adapterLeaveCall", this.id, forEveryone);
         }
 
-        /// <summary>
-        /// Mute the current user during the call or disable microphone locally.
-        /// </summary>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous invocation.</returns>
-        /// <exception cref="ObjectDisposedException">If the <see cref="CallAdapter"/> has already been disposed.</exception>
+        /// <inheritdoc />
         public async Task MuteAsync()
         {
             ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
@@ -89,11 +67,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
             await this.module.InvokeVoidAsync("adapterMute", this.id);
         }
 
-        /// <summary>
-        /// Unmute the current user during the call or enable microphone locally.
-        /// </summary>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous invocation.</returns>
-        /// <exception cref="ObjectDisposedException">If the <see cref="CallAdapter"/> has already been disposed.</exception>
+        /// <inheritdoc />
         public async Task UnmuteAsync()
         {
             ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
@@ -101,11 +75,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
             await this.module.InvokeVoidAsync("adapterUnmute", this.id);
         }
 
-        /// <summary>
-        /// Start sharing the screen during a call.
-        /// </summary>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous invocation.</returns>
-        /// <exception cref="ObjectDisposedException">If the <see cref="CallAdapter"/> has already been disposed.</exception>
+        /// <inheritdoc />
         public async Task StartScreenShareAsync()
         {
             ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
@@ -113,11 +83,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
             await this.module.InvokeVoidAsync("adapterStartScreenShare", this.id);
         }
 
-        /// <summary>
-        /// Stop sharing the screen.
-        /// </summary>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous invocation.</returns>
-        /// <exception cref="ObjectDisposedException">If the <see cref="CallAdapter"/> has already been disposed.</exception>
+        /// <inheritdoc />
         public async Task StopScreenShareAsync()
         {
             ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
