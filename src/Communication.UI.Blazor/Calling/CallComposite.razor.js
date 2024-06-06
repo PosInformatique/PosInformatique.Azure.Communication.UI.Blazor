@@ -73,6 +73,20 @@ export async function adapterUnmute(id) {
     await adapter.unmute();
 }
 
+export async function adapterStartScreenShare(id) {
+
+    const adapter = getAdapter(id);
+
+    await adapter.startScreenShare();
+}
+
+export async function adapterStopScreenShare(id) {
+
+    const adapter = getAdapter(id);
+
+    await adapter.stopScreenShare();
+}
+
 export function dispose(id) {
 
     const adapter = getAdapter(id);

@@ -83,6 +83,30 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
             await this.module.InvokeVoidAsync("adapterUnmute", this.id);
         }
 
+        /// <summary>
+        /// Start sharing the screen during a call.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous invocation.</returns>
+        /// <exception cref="ObjectDisposedException">If the <see cref="CallAdapter"/> has already been disposed.</exception>
+        public async Task StartScreenShareAsync()
+        {
+            ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
+
+            await this.module.InvokeVoidAsync("adapterStartScreenShare", this.id);
+        }
+
+        /// <summary>
+        /// Stop sharing the screen.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous invocation.</returns>
+        /// <exception cref="ObjectDisposedException">If the <see cref="CallAdapter"/> has already been disposed.</exception>
+        public async Task StopScreenShareAsync()
+        {
+            ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
+
+            await this.module.InvokeVoidAsync("adapterStopScreenShare", this.id);
+        }
+
         /// <inheritdoc />
         public async ValueTask DisposeAsync()
         {

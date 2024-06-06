@@ -23,8 +23,8 @@ which has been ported to this library.
 | mute                          | **Done**   |                                                      |
 | unmute                        | **Done**   |                                                      |
 | startCall (Beta)              | No         | Currently in beta                                    |
-| startScreenShare              | TODO       |                                                      |
-| stopScreenShare               | TODO       |                                                      |
+| startScreenShare              | **Done**   |                                                      |
+| stopScreenShare               | **Done**   |                                                      |
 | addParticipant (Beta)         | No         | Currently in beta                                    |
 | removeParticipant             | TODO       |                                                      |
 | createStreamView              | TODO       |                                                      |

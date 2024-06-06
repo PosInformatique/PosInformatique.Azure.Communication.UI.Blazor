@@ -209,6 +209,68 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
         }
 
         [Fact]
+        public async Task StartScreenShareAsync()
+        {
+            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
+            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("adapterStartScreenShare", It.IsAny<object[]>()))
+                .Callback((string _, object[] a) =>
+                {
+                    a.Should().HaveCount(1);
+                    a[0].As<Guid>().Should().NotBeEmpty();
+                })
+                .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
+
+            var adapter = new CallAdapter(module.Object);
+
+            await adapter.StartScreenShareAsync();
+
+            module.VerifyAll();
+        }
+
+        [Fact]
+        public async Task StartScreenShareAsync_AlreadyDisposed()
+        {
+            var adapter = new CallAdapter(default);
+
+            adapter.Dispose();
+
+            await adapter.Invoking(c => c.StartScreenShareAsync())
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
+        }
+
+        [Fact]
+        public async Task StopScreenShareAsync()
+        {
+            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
+            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("adapterStopScreenShare", It.IsAny<object[]>()))
+                .Callback((string _, object[] a) =>
+                {
+                    a.Should().HaveCount(1);
+                    a[0].As<Guid>().Should().NotBeEmpty();
+                })
+                .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
+
+            var adapter = new CallAdapter(module.Object);
+
+            await adapter.StopScreenShareAsync();
+
+            module.VerifyAll();
+        }
+
+        [Fact]
+        public async Task StopScreenShareAsync_AlreadyDisposed()
+        {
+            var adapter = new CallAdapter(default);
+
+            adapter.Dispose();
+
+            await adapter.Invoking(c => c.StopScreenShareAsync())
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
+        }
+
+        [Fact]
         public async Task UnmuteAsync()
         {
             var module = new Mock<IJSObjectReference>(MockBehavior.Strict);

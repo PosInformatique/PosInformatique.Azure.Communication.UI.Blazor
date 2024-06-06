@@ -85,10 +85,15 @@ private async Task JoinCallAsync()
 }
 ```
 
+### Start/Stop screen share
+To start sharing the screen on the current device, call the `StartScreenShare()` method on the `CallAdapter`.
+
+To stop sharing the screen on the current device, call the `StopScreenShare()` method on the `CallAdapter`.
+
 ### Mute/Unmute
 To mute the microphone of the current user, call the `MuteAsync()` method on the `CallAdapter`.
 
-To mute the microphone of the current user, call the `UnmuteAsync()` method on the `CallAdapter`.
+To unmute the microphone of the current user, call the `UnmuteAsync()` method on the `CallAdapter`.
 
 ### Events
 You can subsribe to the following asynchronous events using a standard delegate method:
