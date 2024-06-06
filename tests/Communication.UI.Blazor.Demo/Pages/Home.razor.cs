@@ -115,6 +115,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
             this.callAdapter = await this.CallingService.CreateAdapterAsync(args);
 
             this.callAdapter.OnCallEnded += this.OnCallEnded;
+            this.callAdapter.OnMicrophoneMuteChanged += this.OnMicrophoneMuteChanged;
             this.callAdapter.OnParticipantJoined += this.OnParticipantJoined;
             this.callAdapter.OnParticipantLeft += this.OnParticipantLeft;
         }
@@ -158,6 +159,13 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
         private async Task OnCallEnded(CallAdapterCallEndedEvent @event)
         {
             this.Log($"Call ended (CallId: {@event.CallId})");
+
+            await Task.CompletedTask;
+        }
+
+        private async Task OnMicrophoneMuteChanged(MicrophoneMuteChangedEvent @event)
+        {
+            this.Log($"Microphone mute changed. (IsMuted: {@event.IsMuted}, ParticipantId: {@event.ParticipantId.CommunicationUserId})");
 
             await Task.CompletedTask;
         }

@@ -101,6 +101,7 @@ To unmute the microphone of the current user, call the `UnmuteAsync()` method on
 ### Events
 You can subsribe to the following asynchronous events using a standard delegate method:
 - `OnCallEnded`: Occurs then the call is ended.
+- `OnMicrophoneMuteChanged`: Occurs when the microphone of a participant is mute/unmute.
 - `OnParticipantJoined`: Occurs when a participant join the call.
 - `OnParticipantLeft`: Occurs when a participant leave the call.
 

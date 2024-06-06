@@ -55,7 +55,7 @@ which has been ported to this library.
 |-----------------------------------|-----------|---------|
 | participantsJoined                | **Done**  |         |
 | participantsLeft                  | **Done**  |         |
-| isMutedChanged                    | TODO      |         |
+| isMutedChanged                    | **Done**  |         |
 | callIdChanged                     | TODO      |         |
 | isLocalScreenSharingActiveChanged | TODO      |         |
 | displayNameChanged                | TODO      |         |

@@ -80,15 +80,35 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
 
             // Check the OnCallEnded event
             var endedEvent = new CallAdapterCallEndedEvent(default);
+            var onCallEndedCalled = false;
 
             adapter.OnCallEnded += new AsyncEventHandler<CallAdapterCallEndedEvent>(e =>
             {
                 e.Should().BeSameAs(endedEvent);
+                onCallEndedCalled = true;
 
                 return Task.CompletedTask;
             });
 
             callBackReference.Invoke("OnCallEndedAsync", endedEvent);
+
+            onCallEndedCalled.Should().BeTrue();
+
+            // Check the On, event
+            var muteEvent = new MicrophoneMuteChangedEvent(default, default);
+            var onMicrophoneMuteChanged = false;
+
+            adapter.OnMicrophoneMuteChanged += new AsyncEventHandler<MicrophoneMuteChangedEvent>(e =>
+            {
+                e.Should().BeSameAs(muteEvent);
+                onMicrophoneMuteChanged = true;
+
+                return Task.CompletedTask;
+            });
+
+            callBackReference.Invoke("OnMicrophoneMuteChangedAsync", endedEvent);
+
+            onMicrophoneMuteChanged.Should().BeTrue();
 
             // Check the OnParticipantsJoinedAsync event
             var count = 0;

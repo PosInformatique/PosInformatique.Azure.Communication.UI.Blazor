@@ -24,6 +24,10 @@ export async function createCallAdapter(id, args, eventCallback) {
         return eventCallback.invokeMethodAsync('OnCallEndedAsync', event);
     });
 
+    adapter.on('isMutedChanged', (event) => {
+        return eventCallback.invokeMethodAsync('OnMicrophoneMuteChanged', event);
+    });
+
     adapter.on('participantsJoined', (event) => {
         return eventCallback.invokeMethodAsync('OnParticipantsJoinedAsync', event.joined.map(createRemoteParticipant));
     });

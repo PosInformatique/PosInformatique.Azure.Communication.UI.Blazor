@@ -37,6 +37,11 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         public event AsyncEventHandler<CallAdapterCallEndedEvent>? OnCallEnded;
 
         /// <summary>
+        /// Occurs when the microphone is muted/unmuted on a participant.
+        /// </summary>
+        public event AsyncEventHandler<MicrophoneMuteChangedEvent>? OnMicrophoneMuteChanged;
+
+        /// <summary>
         /// Occurs when a participant join the call.
         /// </summary>
         public event AsyncEventHandler<RemoteParticipantJoinedEvent>? OnParticipantJoined;
@@ -62,7 +67,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         /// <summary>
         /// Leave the call.
         /// </summary>
-        /// <param name="forEveryone">Whether to remove all participants when leaving</param>
+        /// <param name="forEveryone">Whether to remove all participants when leaving.</param>
         /// <returns>A <see cref="Task"/> that represents the asynchronous invocation.</returns>
         /// <exception cref="ObjectDisposedException">If the <see cref="CallAdapter"/> has already been disposed.</exception>
         public async Task LeaveCallAsync(bool forEveryone)
@@ -179,6 +184,15 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
                 if (this.owner.OnCallEnded is not null)
                 {
                     await this.owner.OnCallEnded(@event);
+                }
+            }
+
+            [JSInvokable]
+            public async Task OnMicrophoneMuteChanged(MicrophoneMuteChangedEvent @event)
+            {
+                if (this.owner.OnMicrophoneMuteChanged is not null)
+                {
+                    await this.owner.OnMicrophoneMuteChanged(@event);
                 }
             }
 
