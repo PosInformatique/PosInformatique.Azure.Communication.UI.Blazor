@@ -79,10 +79,10 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
             await adapter.InitializeAsync(args);
 
             // Check the OnCallEnded event
-            var endedEvent = new CallAdapterCallEndedEvent(default);
+            var endedEvent = new CallEndedEvent(default);
             var onCallEndedCalled = false;
 
-            adapter.OnCallEnded += new AsyncEventHandler<CallAdapterCallEndedEvent>(e =>
+            adapter.OnCallEnded += new AsyncEventHandler<CallEndedEvent>(e =>
             {
                 e.Should().BeSameAs(endedEvent);
                 onCallEndedCalled = true;
@@ -106,7 +106,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
                 return Task.CompletedTask;
             });
 
-            callBackReference.Invoke("OnMicrophoneMuteChangedAsync", endedEvent);
+            callBackReference.Invoke("OnMicrophoneMuteChangedAsync", muteEvent);
 
             onMicrophoneMuteChanged.Should().BeTrue();
 

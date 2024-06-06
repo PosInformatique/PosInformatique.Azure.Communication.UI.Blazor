@@ -34,7 +34,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         /// <summary>
         /// Occurs when the call is ended.
         /// </summary>
-        public event AsyncEventHandler<CallAdapterCallEndedEvent>? OnCallEnded;
+        public event AsyncEventHandler<CallEndedEvent>? OnCallEnded;
 
         /// <summary>
         /// Occurs when the microphone is muted/unmuted on a participant.
@@ -179,7 +179,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
             }
 
             [JSInvokable]
-            public async Task OnCallEndedAsync(CallAdapterCallEndedEvent @event)
+            public async Task OnCallEndedAsync(CallEndedEvent @event)
             {
                 if (this.owner.OnCallEnded is not null)
                 {
@@ -188,7 +188,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
             }
 
             [JSInvokable]
-            public async Task OnMicrophoneMuteChanged(MicrophoneMuteChangedEvent @event)
+            public async Task OnMicrophoneMuteChangedAsync(MicrophoneMuteChangedEvent @event)
             {
                 if (this.owner.OnMicrophoneMuteChanged is not null)
                 {

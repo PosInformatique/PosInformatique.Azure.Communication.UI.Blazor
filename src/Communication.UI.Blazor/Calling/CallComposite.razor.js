@@ -25,7 +25,7 @@ export async function createCallAdapter(id, args, eventCallback) {
     });
 
     adapter.on('isMutedChanged', (event) => {
-        return eventCallback.invokeMethodAsync('OnMicrophoneMuteChanged', event);
+        return eventCallback.invokeMethodAsync('OnMicrophoneMuteChangedAsync', event);
     });
 
     adapter.on('participantsJoined', (event) => {

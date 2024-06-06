@@ -156,7 +156,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
             await this.callAdapter!.LeaveCallAsync(this.leaveCallForEveryone);
         }
 
-        private async Task OnCallEnded(CallAdapterCallEndedEvent @event)
+        private async Task OnCallEnded(CallEndedEvent @event)
         {
             this.Log($"Call ended (CallId: {@event.CallId})");
 

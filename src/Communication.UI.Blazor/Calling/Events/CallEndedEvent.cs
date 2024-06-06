@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="CallAdapterCallEndedEvent.cs" company="P.O.S Informatique">
+// <copyright file="CallEndedEvent.cs" company="P.O.S Informatique">
 //     Copyright (c) P.O.S Informatique. All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
@@ -11,13 +11,13 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
     /// <summary>
     /// Contains information when a call is ended.
     /// </summary>
-    public class CallAdapterCallEndedEvent
+    public class CallEndedEvent
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CallAdapterCallEndedEvent"/> class.
+        /// Initializes a new instance of the <see cref="CallEndedEvent"/> class.
         /// </summary>
         /// <param name="callId">Identifier of the call ended.</param>
-        public CallAdapterCallEndedEvent(string callId)
+        public CallEndedEvent(string callId)
         {
             this.CallId = callId;
         }
