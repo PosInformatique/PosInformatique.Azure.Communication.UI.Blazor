@@ -15,6 +15,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
 
         private ICallAdapter? callAdapter;
 
+        private IReadOnlyList<VideoDeviceInfo> cameras;
+
         private string userId;
 
         private string groupIdLocator;
@@ -38,6 +40,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
             this.userId = string.Empty;
             this.groupIdLocator = "76FC6C87-2D4C-49C8-B909-7E3819A88621";
             this.displayName = "John Doe";
+
+            this.cameras = [];
 
             this.cameraButton = true;
             this.devicesButton = true;
@@ -122,6 +126,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
             this.callAdapter.OnMicrophoneMuteChanged += this.OnMicrophoneMuteChanged;
             this.callAdapter.OnParticipantJoined += this.OnParticipantJoined;
             this.callAdapter.OnParticipantLeft += this.OnParticipantLeft;
+
+            this.cameras = await this.callAdapter.QueryCamerasAsync();
         }
 
         private async Task MuteAsync()

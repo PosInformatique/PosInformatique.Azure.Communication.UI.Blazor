@@ -60,7 +60,15 @@
 
     <button @onclick="this.StartScreenShareAsync" disabled="@(this.callAdapter is null)">Start screen share</button>
     <button @onclick="this.StopScreenShareAsync" disabled="@(this.callAdapter is null)">Stop screen share</button>
-
+</div>
+<div>
+    <label for="cameras">Available cameras:</label>
+    <select name="cameras" id="cameras">
+        @foreach (var camera in this.cameras)
+        {
+            <option value="@camera.Id">@camera.Name (Id: @camera.Id, Type: @camera.DeviceType)</option>
+        }
+    </select>
 </div>
 
 <CallComposite Adapter="this.callAdapter"

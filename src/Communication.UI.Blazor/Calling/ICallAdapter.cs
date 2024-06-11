@@ -57,6 +57,13 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         Task MuteAsync();
 
         /// <summary>
+        /// Query for available camera devices.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous invocation which contains the camera devices available.</returns>
+        /// <exception cref="ObjectDisposedException">If the <see cref="CallAdapter"/> has already been disposed.</exception>
+        Task<IReadOnlyList<VideoDeviceInfo>> QueryCamerasAsync();
+
+        /// <summary>
         /// Start sharing the screen during a call.
         /// </summary>
         /// <returns>A <see cref="Task"/> that represents the asynchronous invocation.</returns>

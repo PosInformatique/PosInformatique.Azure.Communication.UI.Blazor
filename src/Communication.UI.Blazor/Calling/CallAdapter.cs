@@ -91,6 +91,14 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         }
 
         /// <inheritdoc />
+        public async Task<IReadOnlyList<VideoDeviceInfo>> QueryCamerasAsync()
+        {
+            ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
+
+            return await this.Module.InvokeAsync<IReadOnlyList<VideoDeviceInfo>>("adapterQueryCameras", this.Id);
+        }
+
+        /// <inheritdoc />
         public async ValueTask DisposeAsync()
         {
             if (this.callbackEvent != null)

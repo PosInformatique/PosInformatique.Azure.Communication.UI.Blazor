@@ -14,24 +14,24 @@ which has been ported to this library.
 | offStateChange                | TODO       |                                                      |
 | getState                      | TODO       |                                                      |
 | dispose                       | **Done**   |                                                      |
-| holdCall (Beta)               | No         | Currently in beta                                    |
+| holdCall (Beta)               | No         | Currently in beta in Microsoft library               |
 | joinCall (Deprecated)         | No         | Deprecated                                           |
 | joinCall                      | Partially  | Need to wrap the Call returned object                |
 | leaveCall                     | **Done**   |                                                      |
-| resumeCall (Beta)             | No         | Currently in beta                                    |
+| resumeCall (Beta)             | No         | Currently in beta in Microsoft library               |
 | startCamera                   | TODO       |                                                      |
 | stopCamera                    | TODO       |                                                      |
 | mute                          | **Done**   |                                                      |
 | unmute                        | **Done**   |                                                      |
-| startCall (Beta)              | No         | Currently in beta                                    |
+| startCall (Beta)              | No         | Currently in beta in Microsoft library               |
 | startScreenShare              | **Done**   |                                                      |
 | stopScreenShare               | **Done**   |                                                      |
-| addParticipant (Beta)         | No         | Currently in beta                                    |
+| addParticipant (Beta)         | No         | Currently in beta in Microsoft library               |
 | removeParticipant             | TODO       |                                                      |
 | createStreamView              | TODO       |                                                      |
 | disposeStreamView             | TODO       |                                                      |
 | askDevicePermission           | TODO       |                                                      |
-| queryCameras                  | TODO       |                                                      |
+| queryCameras                  | **Done**   |                                                      |
 | queryMicrophones              | TODO       |                                                      |
 | querySpeakers                 | TODO       |                                                      |
 | setCamera                     | TODO       |                                                      |

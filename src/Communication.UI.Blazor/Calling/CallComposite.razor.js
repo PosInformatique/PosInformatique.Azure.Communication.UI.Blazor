@@ -69,6 +69,15 @@ export async function adapterMute(id) {
     await adapter.mute();
 }
 
+export async function adapterQueryCameras(id) {
+
+    const adapter = getAdapter(id);
+
+    var cameras = await adapter.queryCameras();
+
+    return cameras.map(createCameraDevice)
+}
+
 export async function adapterUnmute(id) {
 
     const adapter = getAdapter(id);
@@ -116,5 +125,13 @@ function createRemoteParticipant(remoteParticipant) {
     return {
         identifier: remoteParticipant.identifier,
         displayName: remoteParticipant.displayName,
+    };
+}
+
+function createCameraDevice(cameraDevice) {
+    return {
+        name: cameraDevice.name,
+        id: cameraDevice.id,
+        deviceType: cameraDevice.deviceType,
     };
 }

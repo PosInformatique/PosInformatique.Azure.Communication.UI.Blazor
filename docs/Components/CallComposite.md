@@ -92,6 +92,9 @@ To mute the microphone of the current user, call the `MuteAsync()` method on the
 
 To unmute the microphone of the current user, call the `UnmuteAsync()` method on the `ICallAdapter`.
 
+### Gets available cameras
+To retrieve the list of available camera call the `QueryCamerasAsync()` method.
+
 ### Events
 You can subsribe to the following asynchronous events using a standard delegate method:
 - `OnCallEnded`: Occurs then the call is ended.
