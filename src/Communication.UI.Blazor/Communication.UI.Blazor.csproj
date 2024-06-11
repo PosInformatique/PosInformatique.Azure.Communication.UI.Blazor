@@ -11,6 +11,21 @@
     <PackageProjectUrl>https://github.com/PosInformatique/PosInformatique.Azure.Communication.UI.Blazor</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>
+      1.1.0
+      - Refactoring to separate the CallAdapter and the CallComposite to reflect the architecture of the Communication UI Library.
+        This refactoring required now a service which will let the developer to create the CallAdapter.
+        The events has been moved to the CallAdapter.
+      - The CallComposite have parameters to select the button to hide or display.
+      - Add the following APIs in the CallAdapter:
+        - LeaveCallAsync()
+        - MuteAsync()
+        - UnmuteAsync()
+        - StartScreenShareAsync()
+        - StopScreenShareAsync()
+       - Add the following events in the CallAdapter
+        - OnMicrophoneMuteChanged
+        - CallEnded
+        
       1.0.0
       - Initial version with the CallComposite component.
     </PackageReleaseNotes>
