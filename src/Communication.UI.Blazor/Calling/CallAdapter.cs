@@ -6,7 +6,6 @@
 
 namespace PosInformatique.Azure.Communication.UI.Blazor
 {
-    using Microsoft.AspNetCore.Components;
     using Microsoft.JSInterop;
 
     /// <summary>
@@ -14,10 +13,6 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
     /// </summary>
     public class CallAdapter : CommonCallAdapter, IDisposable, IAsyncDisposable
     {
-        private readonly Guid id;
-
-        private readonly IJSObjectReference module;
-
         private CallbackEvent? callbackEvent;
 
         /// <summary>
@@ -25,8 +20,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         /// </summary>
         internal CallAdapter(IJSObjectReference module)
         {
-            this.module = module;
-            this.id = Guid.NewGuid();
+            this.Module = module;
+            this.Id = Guid.NewGuid();
 
             this.callbackEvent = new CallbackEvent(this);
         }
@@ -51,6 +46,10 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         /// </summary>
         public event AsyncEventHandler<RemoteParticipantLeftEvent>? OnParticipantLeft;
 
+        internal Guid Id { get; }
+
+        internal IJSObjectReference Module { get; }
+
         /// <summary>
         /// Join an existing call.
         /// </summary>
@@ -61,7 +60,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         {
             ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
 
-            await this.module.InvokeVoidAsync("adapterJoinCall", this.id, options);
+            await this.Module.InvokeVoidAsync("adapterJoinCall", this.Id, options);
         }
 
         /// <summary>
@@ -74,7 +73,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         {
             ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
 
-            await this.module.InvokeVoidAsync("adapterLeaveCall", this.id, forEveryone);
+            await this.Module.InvokeVoidAsync("adapterLeaveCall", this.Id, forEveryone);
         }
 
         /// <summary>
@@ -86,7 +85,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         {
             ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
 
-            await this.module.InvokeVoidAsync("adapterMute", this.id);
+            await this.Module.InvokeVoidAsync("adapterMute", this.Id);
         }
 
         /// <summary>
@@ -98,7 +97,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         {
             ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
 
-            await this.module.InvokeVoidAsync("adapterUnmute", this.id);
+            await this.Module.InvokeVoidAsync("adapterUnmute", this.Id);
         }
 
         /// <summary>
@@ -110,7 +109,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         {
             ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
 
-            await this.module.InvokeVoidAsync("adapterStartScreenShare", this.id);
+            await this.Module.InvokeVoidAsync("adapterStartScreenShare", this.Id);
         }
 
         /// <summary>
@@ -122,7 +121,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         {
             ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
 
-            await this.module.InvokeVoidAsync("adapterStopScreenShare", this.id);
+            await this.Module.InvokeVoidAsync("adapterStopScreenShare", this.Id);
         }
 
         /// <inheritdoc />
@@ -130,8 +129,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         {
             if (this.callbackEvent != null)
             {
-                await this.module.InvokeVoidAsync("dispose", this.id);
-                await this.module.DisposeAsync();
+                await this.Module.InvokeVoidAsync("dispose", this.Id);
             }
 
             this.Dispose();
@@ -149,12 +147,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
 
         internal async Task InitializeAsync(CallAdapterArgs args)
         {
-            await this.module.InvokeVoidAsync("createCallAdapter", this.id, args, this.callbackEvent!.Reference);
-        }
-
-        internal async Task InitializeControlAsync(ElementReference callContainer)
-        {
-            await this.module.InvokeVoidAsync("initializeControl", this.id, callContainer);
+            await this.Module.InvokeVoidAsync("createCallAdapter", this.Id, args, this.callbackEvent!.Reference);
         }
 
         private class CallbackEvent : IDisposable

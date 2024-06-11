@@ -12,6 +12,17 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
     public class CallAdapterTest
     {
         [Fact]
+        public void Constructor()
+        {
+            var module = Mock.Of<IJSObjectReference>();
+
+            var callAdapter = new CallAdapter(module);
+
+            callAdapter.Id.Should().NotBeEmpty();
+            callAdapter.Module.Should().BeSameAs(module);
+        }
+
+        [Fact]
         public async Task DisposeAsync()
         {
             var elementReference = new ElementReference("The id");
@@ -21,8 +32,6 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
             var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
             module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("dispose", It.IsAny<object[]>()))
                 .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
-            module.Setup(m => m.DisposeAsync())
-                .Returns(ValueTask.CompletedTask);
 
             var callAdapter = new CallAdapter(module.Object);
 
@@ -149,28 +158,6 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
             callBackReference.Invoke("OnParticipantsLeftAsync", [removedParticipant]);
 
             count.Should().Be(2);
-
-            module.VerifyAll();
-        }
-
-        [Fact]
-        public async Task InitializeControlAsync()
-        {
-            var callContainer = new ElementReference("The element");
-
-            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
-            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initializeControl", It.IsAny<object[]>()))
-                .Callback((string _, object[] a) =>
-                {
-                    a.Should().HaveCount(2);
-                    a[0].As<Guid>().Should().NotBeEmpty();
-                    a[1].Should().Be(callContainer);
-                })
-                .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
-
-            var adapter = new CallAdapter(module.Object);
-
-            await adapter.InitializeControlAsync(callContainer);
 
             module.VerifyAll();
         }

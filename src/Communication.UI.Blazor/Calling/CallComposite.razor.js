@@ -39,21 +39,13 @@ export async function createCallAdapter(id, args, eventCallback) {
     registerAdapter(id, adapter);
 }
 
-export function initializeControl(id, divElement) {
+export function initializeControl(divElement, adapterId, callControls) {
 
-    var adapter = getAdapter(id);
+    var adapter = getAdapter(adapterId);
 
-    if (typeof divElement.adapter != "undefined") {
-        if (divElement.adapter == adapter) {
-            return;
-        }
+    var element = createElement(CallComposite, { options: { callControls: callControls }, adapter: adapter }, null);
 
-        dispose(divElement);
-    }
-
-    divElement.adapter = getAdapter(id);
-
-    createRoot(divElement).render(createElement(CallComposite, { adapter: divElement.adapter }, null));
+    createRoot(divElement).render(element);
 }
 
 export function adapterJoinCall(id, options) {
@@ -63,11 +55,11 @@ export function adapterJoinCall(id, options) {
     adapter.joinCall(options);
 }
 
-export function adapterLeaveCall(id, forEveryone) {
+export async function adapterLeaveCall(id, forEveryone) {
 
     const adapter = getAdapter(id);
 
-    adapter.leaveCall(forEveryone);
+    await adapter.leaveCall(forEveryone);
 }
 
 export async function adapterMute(id) {
@@ -101,10 +93,6 @@ export async function adapterStopScreenShare(id) {
 export function dispose(id) {
 
     const adapter = getAdapter(id);
-
-    if (divElement.adapter != null) {
-        divElement.adapter = null;
-    }
 
     adapter.dispose();
 

@@ -108,22 +108,13 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
                 new TokenCredential(token))
             {
                 DisplayName = this.displayName,
-                Options =
-                {
-                    CallControls =
-                    {
-                        CameraButton = this.cameraButton,
-                        DevicesButton = this.devicesButton,
-                        EndCallButton = this.endCallButton,
-                        MicrophoneButton = this.microphoneButton,
-                        MoreButton = this.moreButton,
-                        ParticipantsButton = this.participantsButton,
-                        PeopleButton = this.peopleButton,
-                        RaiseHandButton = this.raiseHandButton,
-                        ScreenShareButton = this.screenShareButton,
-                    },
-                },
             };
+
+            if (this.callAdapter is not null)
+            {
+                await this.callAdapter.DisposeAsync();
+                this.callAdapter = null;
+            }
 
             this.callAdapter = await this.CallingService.CreateAdapterAsync(args);
 

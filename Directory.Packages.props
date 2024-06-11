@@ -13,7 +13,7 @@
     <PackageVersion Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.10.48" />
     <PackageVersion Include="Moq" Version="4.20.70" />
     <PackageVersion Include="PosInformatique.FluentAssertions.Json" Version="1.2.0" />
-    <PackageVersion Include="PosInformatique.Moq.Analyzers" Version="1.4.0" />
+    <PackageVersion Include="PosInformatique.Moq.Analyzers" Version="1.5.0" />
     <PackageVersion Include="StyleCop.Analyzers" Version="1.2.0-beta.556" />
     <PackageVersion Include="xunit" Version="2.8.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.0" />

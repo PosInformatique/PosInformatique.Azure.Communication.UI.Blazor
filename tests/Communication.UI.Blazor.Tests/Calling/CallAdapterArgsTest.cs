@@ -20,7 +20,6 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
             args.Credential.Should().BeSameAs(credential);
             args.DisplayName.Should().Be("Anonymous");
             args.Locator.Should().BeSameAs(locator);
-            args.Options.Should().NotBeNull();
             args.UserId.Should().BeSameAs(userId);
         }
 
@@ -43,21 +42,6 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
                 new TokenCredential("The token id"))
             {
                 DisplayName = "The display name",
-                Options =
-                {
-                    CallControls =
-                    {
-                        CameraButton = true,
-                        EndCallButton = true,
-                        MicrophoneButton = true,
-                        DevicesButton = true,
-                        MoreButton = true,
-                        ParticipantsButton = true,
-                        PeopleButton = true,
-                        RaiseHandButton = true,
-                        ScreenShareButton = true,
-                    },
-                },
             };
 
             args.Should().BeJsonSerializableInto(new
@@ -74,21 +58,6 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
                 locator = new
                 {
                     groupId = "The group id",
-                },
-                options = new
-                {
-                    callControls = new
-                    {
-                        cameraButton = true,
-                        endCallButton = true,
-                        microphoneButton = true,
-                        devicesButton = true,
-                        participantsButton = true,
-                        screenShareButton = true,
-                        moreButton = true,
-                        raiseHandButton = true,
-                        peopleButton = true,
-                    },
                 },
             });
         }
@@ -111,21 +80,6 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
                 {
                     groupId = "The group id",
                 },
-                options = new
-                {
-                    callControls = new
-                    {
-                        cameraButton = true,
-                        endCallButton = true,
-                        microphoneButton = true,
-                        devicesButton = true,
-                        participantsButton = true,
-                        screenShareButton = true,
-                        moreButton = true,
-                        raiseHandButton = true,
-                        peopleButton = true,
-                    },
-                },
             };
 
             json.Should().BeJsonDeserializableInto(new CallAdapterArgs(
@@ -134,21 +88,6 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
                 new TokenCredential("The token id"))
             {
                 DisplayName = "The display name",
-                Options =
-                {
-                    CallControls =
-                    {
-                        CameraButton = true,
-                        EndCallButton = true,
-                        MicrophoneButton = true,
-                        DevicesButton = true,
-                        MoreButton = true,
-                        ParticipantsButton = true,
-                        PeopleButton = true,
-                        RaiseHandButton = true,
-                        ScreenShareButton = true,
-                    },
-                },
             });
         }
     }
