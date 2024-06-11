@@ -15,6 +15,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
             var @event = new MicrophoneMuteChangedEvent(participantId, true);
 
             @event.IsMuted.Should().BeTrue();
+            @event.ParticipantId.Should().BeSameAs(participantId);
         }
     }
 }

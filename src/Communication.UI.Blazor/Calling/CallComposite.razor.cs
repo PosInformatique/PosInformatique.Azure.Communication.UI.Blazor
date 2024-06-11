@@ -14,6 +14,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
     /// </summary>
     public sealed partial class CallComposite
     {
+        private static readonly CallControlOptions DefaultOptions = new CallControlOptions();
+
         private ElementReference callContainer;
 
         /// <summary>
@@ -22,7 +24,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         /// </summary>
         [Parameter]
         [EditorRequired]
-        public CallAdapter? Adapter { get; set; }
+        public ICallAdapter? Adapter { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether to
@@ -30,7 +32,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         /// Default value: <see cref="true"/>.
         /// </summary>
         [Parameter]
-        public bool CameraButton { get; set; }
+        public bool CameraButton { get; set; } = DefaultOptions.CameraButton;
 
         /// <summary>
         /// Gets or sets a value indicating whether to
@@ -38,7 +40,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         /// Default value: <see cref="true"/>.
         /// </summary>
         [Parameter]
-        public bool DevicesButton { get; set; }
+        public bool DevicesButton { get; set; } = DefaultOptions.DevicesButton;
 
         /// <summary>
         /// Gets or sets a value indicating whether to
@@ -46,7 +48,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         /// Default value: <see cref="true"/>.
         /// </summary>
         [Parameter]
-        public bool EndCallButton { get; set; }
+        public bool EndCallButton { get; set; } = DefaultOptions.EndCallButton;
 
         /// <summary>
         /// Gets or sets a value indicating whether to
@@ -54,7 +56,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         /// Default value: <see cref="true"/>.
         /// </summary>
         [Parameter]
-        public bool MicrophoneButton { get; set; }
+        public bool MicrophoneButton { get; set; } = DefaultOptions.MicrophoneButton;
 
         /// <summary>
         /// Gets or sets a value indicating whether to
@@ -62,7 +64,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         /// Default value: <see cref="true"/>.
         /// </summary>
         [Parameter]
-        public bool MoreButton { get; set; }
+        public bool MoreButton { get; set; } = DefaultOptions.MoreButton;
 
         /// <summary>
         /// Gets or sets a value indicating whether to
@@ -70,7 +72,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         /// Default value: <see cref="true"/>.
         /// </summary>
         [Parameter]
-        public bool ParticipantsButton { get; set; }
+        public bool ParticipantsButton { get; set; } = DefaultOptions.ParticipantsButton;
 
         /// <summary>
         /// Gets or sets a value indicating whether to
@@ -78,7 +80,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         /// Default value: <see cref="true"/>.
         /// </summary>
         [Parameter]
-        public bool PeopleButton { get; set; }
+        public bool PeopleButton { get; set; } = DefaultOptions.PeopleButton;
 
         /// <summary>
         /// Gets or sets a value indicating whether to
@@ -86,7 +88,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         /// Default value: <see cref="true"/>.
         /// </summary>
         [Parameter]
-        public bool RaiseHandButton { get; set; }
+        public bool RaiseHandButton { get; set; } = DefaultOptions.RaiseHandButton;
 
         /// <summary>
         /// Gets or sets a value indicating whether to
@@ -94,13 +96,18 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         /// Default value: <see cref="true"/>.
         /// </summary>
         [Parameter]
-        public bool ScreenShareButton { get; set; }
+        public bool ScreenShareButton { get; set; } = DefaultOptions.ScreenShareButton;
 
         /// <inheritdoc />
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (this.Adapter is not null)
             {
+                if (this.Adapter is not CallAdapter adapter)
+                {
+                    throw new InvalidOperationException("The Adapter property must an instance of the CallAdapter class.");
+                }
+
                 var options = new CallControlOptions()
                 {
                     CameraButton = this.CameraButton,
@@ -114,7 +121,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
                     ScreenShareButton = this.ScreenShareButton,
                 };
 
-                await this.Adapter.Module.InvokeVoidAsync("initializeControl", this.callContainer, this.Adapter.Id, options);
+                await adapter.Module.InvokeVoidAsync("initializeControl", this.callContainer, adapter.Id, options);
             }
         }
     }
