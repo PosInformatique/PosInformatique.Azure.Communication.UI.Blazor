@@ -27,6 +27,10 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
+            // Required by the CallComposite component.
+            builder.Services.AddCalling();
+
+            // Used to create identity user and retrieve ACS tokens.
             builder.Services.AddSingleton<IdentityManager>();
             builder.Services.Configure<IdentityManagerOptions>(opt =>
             {

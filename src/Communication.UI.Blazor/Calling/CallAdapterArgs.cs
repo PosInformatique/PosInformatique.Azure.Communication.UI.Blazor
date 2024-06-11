@@ -25,7 +25,6 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
             this.DisplayName = "Anonymous";
             this.Locator = locator;
             this.Credential = credential;
-            this.Options = new CallCompositeOptions();
         }
 
         /// <summary>
@@ -55,12 +54,5 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         [JsonPropertyName("locator")]
         [JsonPropertyOrder(4)]
         public GroupCallLocator Locator { get; }
-
-        /// <summary>
-        /// Gets the options of the <see cref="CallComposite"/>.
-        /// </summary>
-        [JsonPropertyName("options")]
-        [JsonPropertyOrder(5)]
-        public CallCompositeOptions Options { get; }
     }
 }

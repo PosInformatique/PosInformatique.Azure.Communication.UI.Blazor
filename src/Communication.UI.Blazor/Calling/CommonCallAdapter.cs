@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="CallControlOptions.cs" company="P.O.S Informatique">
+// <copyright file="CommonCallAdapter.cs" company="P.O.S Informatique">
 //     Copyright (c) P.O.S Informatique. All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
@@ -7,14 +7,14 @@
 namespace PosInformatique.Azure.Communication.UI.Blazor
 {
     /// <summary>
-    /// Customization options for the control bar in calling experience.
+    /// <see cref="CallComposite"/> adapter interface.
     /// </summary>
-    internal class CallControlOptions : CommonCallControlOptions
+    public abstract class CommonCallAdapter
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="CallControlOptions"/> class.
+        /// Initializes a new instance of the <see cref="CommonCallAdapter"/> class.
         /// </summary>
-        public CallControlOptions()
+        protected CommonCallAdapter()
         {
         }
     }

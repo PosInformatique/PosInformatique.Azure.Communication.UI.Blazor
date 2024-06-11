@@ -11,7 +11,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
     /// <summary>
     /// Customization options for the control bar in calling experience.
     /// </summary>
-    public abstract class CommonCallControlOptions
+    internal abstract class CommonCallControlOptions
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="CommonCallControlOptions"/> class.

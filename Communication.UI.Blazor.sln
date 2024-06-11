@@ -33,6 +33,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Communication.UI.Blazor.Demo", "tests\Communication.UI.Blazor.Demo\Communication.UI.Blazor.Demo.csproj", "{0499E905-30D5-451E-BFAE-E900E8227075}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{8A9FB002-346C-4751-A00E-158921926CB6}"
+	ProjectSection(SolutionItems) = preProject
+		docs\PortedApi.md = docs\PortedApi.md
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", "{796792A1-0557-4BCF-832C-61A698C190DD}"
 	ProjectSection(SolutionItems) = preProject

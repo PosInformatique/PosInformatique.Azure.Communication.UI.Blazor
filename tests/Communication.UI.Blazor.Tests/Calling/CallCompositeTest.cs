@@ -6,225 +6,207 @@
 
 namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
 {
+    using AngleSharp.Dom;
+    using Bunit;
     using Microsoft.AspNetCore.Components;
+    using Microsoft.Extensions.DependencyInjection;
     using Microsoft.JSInterop;
 
-    public class CallCompositeTest
+    public class CallCompositeTest : TestContext
     {
         [Fact]
         public void Constructor()
         {
             var callComposite = new CallComposite();
 
-            callComposite.IsLoaded.Should().BeFalse();
-            callComposite.JSRuntime.Should().BeNull();
-            callComposite.OnCallEnded.HasDelegate.Should().BeFalse();
-            callComposite.OnParticipantJoined.HasDelegate.Should().BeFalse();
-            callComposite.OnParticipantLeft.HasDelegate.Should().BeFalse();
+            callComposite.Adapter.Should().BeNull();
+            callComposite.CameraButton.Should().BeTrue();
+            callComposite.DevicesButton.Should().BeTrue();
+            callComposite.EndCallButton.Should().BeTrue();
+            callComposite.MicrophoneButton.Should().BeTrue();
+            callComposite.MoreButton.Should().BeTrue();
+            callComposite.ParticipantsButton.Should().BeTrue();
+            callComposite.PeopleButton.Should().BeTrue();
+            callComposite.RaiseHandButton.Should().BeTrue();
+            callComposite.ScreenShareButton.Should().BeTrue();
         }
 
         [Fact]
-        public async Task JoinCallAsync()
+        public void Adapter_ValueChanged()
         {
-            var elementReference = new ElementReference("The id");
+            var callComposite = new CallComposite();
 
-            var options = new JoinCallOptions();
+            var adapter = Mock.Of<ICallAdapter>();
 
-            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
-            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initialize", It.IsAny<object[]>()))
-                .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
-            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("adapterJoinCall", It.IsAny<object[]>()))
-                .Callback((string _, object[] a) =>
-                {
-                    a.Should().HaveCount(2);
-                    a[0].Should().Be(elementReference);
-                    a[1].Should().BeSameAs(options);
-                })
-                .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
+            callComposite.Adapter = adapter;
 
-            var jsRuntime = new Mock<IJSRuntime>(MockBehavior.Strict);
-            jsRuntime.Setup(j => j.InvokeAsync<IJSObjectReference>("import", It.Is<object[]>(args => (string)args[0] == "./_content/PosInformatique.Azure.Communication.UI.Blazor/Calling/CallComposite.razor.js")))
-                .ReturnsAsync(module.Object);
+            callComposite.Adapter.Should().BeSameAs(adapter);
+        }
 
-            var callComposite = new CallComposite()
+        [Fact]
+        public void CameraButton_ValueChanged()
+        {
+            var callComposite = new CallComposite();
+
+            callComposite.CameraButton = true;
+
+            callComposite.CameraButton.Should().BeTrue();
+        }
+
+        [Fact]
+        public void DevicesButton_ValueChanged()
+        {
+            var callComposite = new CallComposite();
+
+            callComposite.DevicesButton = true;
+
+            callComposite.DevicesButton.Should().BeTrue();
+        }
+
+        [Fact]
+        public void EndCallButton_ValueChanged()
+        {
+            var callComposite = new CallComposite();
+
+            callComposite.EndCallButton = true;
+
+            callComposite.EndCallButton.Should().BeTrue();
+        }
+
+        [Fact]
+        public void MicrophoneButton_ValueChanged()
+        {
+            var callComposite = new CallComposite();
+
+            callComposite.MicrophoneButton = true;
+
+            callComposite.MicrophoneButton.Should().BeTrue();
+        }
+
+        [Fact]
+        public void MoreButton_ValueChanged()
+        {
+            var callComposite = new CallComposite();
+
+            callComposite.MoreButton = true;
+
+            callComposite.MoreButton.Should().BeTrue();
+        }
+
+        [Fact]
+        public void ParticipantsButton_ValueChanged()
+        {
+            var callComposite = new CallComposite();
+
+            callComposite.ParticipantsButton = true;
+
+            callComposite.ParticipantsButton.Should().BeTrue();
+        }
+
+        [Fact]
+        public void PeopleButton_ValueChanged()
+        {
+            var callComposite = new CallComposite();
+
+            callComposite.PeopleButton = true;
+
+            callComposite.PeopleButton.Should().BeTrue();
+        }
+
+        [Fact]
+        public void RaiseHandButton_ValueChanged()
+        {
+            var callComposite = new CallComposite();
+
+            callComposite.RaiseHandButton = true;
+
+            callComposite.RaiseHandButton.Should().BeTrue();
+        }
+
+        [Fact]
+        public void ScreenShareButton_ValueChanged()
+        {
+            var callComposite = new CallComposite();
+
+            callComposite.ScreenShareButton = true;
+
+            callComposite.ScreenShareButton.Should().BeTrue();
+        }
+
+        [Fact]
+        public void Render_WithNullAdapter()
+        {
+            var render = this.RenderComponent<CallComposite>(parameters =>
             {
-                JSRuntime = jsRuntime.Object,
-            };
+                parameters.Add(p => p.Adapter, null);
+            });
 
-            callComposite.SetFieldValue("callContainer", elementReference);
-
-            await callComposite.LoadAsync(default);
-
-            await callComposite.JoinCallAsync(options);
-
-            callComposite.IsLoaded.Should().BeTrue();
-
-            jsRuntime.VerifyAll();
-            module.VerifyAll();
+            render.MarkupMatches($"<div id=\"call-container\" style=\"height: 50vh\" blazor:elementReference=\"99b58d8c-1f85-4efd-bde6-044310bb65f3\"></div>");
         }
 
         [Fact]
-        public async Task JoinCallAsync_NotLoaded()
+        public void Render_WithAdapter()
         {
-            var options = new JoinCallOptions();
-
-            var callComposite = new CallComposite();
-
-            await callComposite.Invoking(c => c.JoinCallAsync(options))
-                .Should().ThrowExactlyAsync<InvalidOperationException>()
-                .WithMessage("The component has not been loaded. Ensures that the LoadAsync() method has been called first.");
-        }
-
-        [Fact]
-        public async Task JoinAsync_AlreadyDisposed()
-        {
-            var callComposite = new CallComposite();
-
-            callComposite.Dispose();
-
-            await callComposite.Invoking(c => c.JoinCallAsync(default))
-                .Should().ThrowExactlyAsync<ObjectDisposedException>()
-                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallComposite'.");
-        }
-
-        [Fact]
-        public async Task LoadAsync()
-        {
-            var elementReference = new ElementReference("The id");
-
-            var args = new CallAdapterArgs(default, default, default);
-
-            object callBackReference = null;
+            ElementReference elementReference = default;
+            Guid adapterId = default;
 
             var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
-            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initialize", It.IsAny<object[]>()))
+            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initializeControl", It.IsAny<object[]>()))
                 .Callback((string _, object[] a) =>
                 {
                     a.Should().HaveCount(3);
-                    a[0].Should().Be(elementReference);
-                    a[1].Should().BeSameAs(args);
 
-                    callBackReference = a[2].GetPropertyValue("Value");
+                    elementReference = a[0].As<ElementReference>();
+                    adapterId = a[1].As<Guid>();
+
+                    a[2].Should().BeEquivalentTo(new CallControlOptions()
+                    {
+                        CameraButton = true,
+                        DevicesButton = true,
+                        EndCallButton = true,
+                        MicrophoneButton = true,
+                        MoreButton = true,
+                        ParticipantsButton = true,
+                        PeopleButton = true,
+                        RaiseHandButton = true,
+                        ScreenShareButton = true,
+                    });
                 })
                 .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
 
-            var jsRuntime = new Mock<IJSRuntime>(MockBehavior.Strict);
-            jsRuntime.Setup(j => j.InvokeAsync<IJSObjectReference>("import", It.Is<object[]>(args => (string)args[0] == "./_content/PosInformatique.Azure.Communication.UI.Blazor/Calling/CallComposite.razor.js")))
-                .ReturnsAsync(module.Object);
+            var adapter = new CallAdapter(module.Object);
 
-            var callComposite = new CallComposite()
+            var render = this.RenderComponent<CallComposite>(parameters =>
             {
-                JSRuntime = jsRuntime.Object,
-            };
-
-            callComposite.SetFieldValue("callContainer", elementReference);
-
-            await callComposite.LoadAsync(args);
-
-            callComposite.IsLoaded.Should().BeTrue();
-
-            // Check the OnCallEnded event
-            var endedEvent = new CallAdapterCallEndedEvent(default);
-
-            callComposite.OnCallEnded = new EventCallback<CallAdapterCallEndedEvent>(null, (CallAdapterCallEndedEvent e) =>
-            {
-                e.Should().BeSameAs(endedEvent);
+                parameters.Add(p => p.Adapter, adapter);
+                parameters.Add(p => p.CameraButton, true);
+                parameters.Add(p => p.DevicesButton, true);
+                parameters.Add(p => p.EndCallButton, true);
+                parameters.Add(p => p.MicrophoneButton, true);
+                parameters.Add(p => p.MoreButton, true);
+                parameters.Add(p => p.ParticipantsButton, true);
+                parameters.Add(p => p.PeopleButton, true);
+                parameters.Add(p => p.RaiseHandButton, true);
+                parameters.Add(p => p.ScreenShareButton, true);
             });
 
-            callBackReference.Invoke("OnCallEndedAsync", endedEvent);
+            adapterId.Should().Be(adapter.Id);
+            render.Markup.Should().Be($"<div id=\"call-container\" style=\"height: 50vh\" blazor:elementReference=\"{elementReference.Id}\"></div>");
 
-            // Check the OnParticipantsJoinedAsync event
-            var count = 0;
-
-            var joinedParticipant = new[]
-            {
-                new RemoteParticipant(default, default),
-                new RemoteParticipant(default, default),
-            };
-
-            callComposite.OnParticipantJoined = new EventCallback<RemoteParticipantJoinedEvent>(null, (RemoteParticipantJoinedEvent e) =>
-            {
-                e.Participant.Should().BeSameAs(joinedParticipant[count++]);
-            });
-
-            callBackReference.Invoke("OnParticipantsJoinedAsync", [joinedParticipant]);
-
-            count.Should().Be(2);
-
-            // Check the OnParticipantsLeftAsync event
-            count = 0;
-
-            var removedParticipant = new[]
-            {
-                new RemoteParticipant(default, default),
-                new RemoteParticipant(default, default),
-            };
-
-            callComposite.OnParticipantLeft = new EventCallback<RemoteParticipantLeftEvent>(null, (RemoteParticipantLeftEvent e) =>
-            {
-                e.Participant.Should().BeSameAs(removedParticipant[count++]);
-            });
-
-            callBackReference.Invoke("OnParticipantsLeftAsync", [removedParticipant]);
-
-            count.Should().Be(2);
-
-            jsRuntime.VerifyAll();
             module.VerifyAll();
         }
 
         [Fact]
-        public async Task LoadAsync_AlreadyDisposed()
+        public void Render_WithNoCallAdapter()
         {
-            var callComposite = new CallComposite();
+            var adapter = Mock.Of<ICallAdapter>();
 
-            callComposite.Dispose();
-
-            await callComposite.Invoking(c => c.LoadAsync(default))
-                .Should().ThrowExactlyAsync<ObjectDisposedException>()
-                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallComposite'.");
-        }
-
-        [Fact]
-        public async Task DisposeAsync()
-        {
-            var elementReference = new ElementReference("The id");
-
-            var args = new CallAdapterArgs(default, default, default);
-
-            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
-            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initialize", It.IsAny<object[]>()))
-                .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
-            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("dispose", It.IsAny<object[]>()))
-                .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
-            module.Setup(m => m.DisposeAsync())
-                .Returns(ValueTask.CompletedTask);
-
-            var jsRuntime = new Mock<IJSRuntime>(MockBehavior.Strict);
-            jsRuntime.Setup(j => j.InvokeAsync<IJSObjectReference>("import", It.Is<object[]>(args => (string)args[0] == "./_content/PosInformatique.Azure.Communication.UI.Blazor/Calling/CallComposite.razor.js")))
-                .ReturnsAsync(module.Object);
-
-            var callComposite = new CallComposite()
+            this.Invoking(t => t.RenderComponent<CallComposite>(parameters =>
             {
-                JSRuntime = jsRuntime.Object,
-            };
-
-            callComposite.SetFieldValue("callContainer", elementReference);
-
-            await callComposite.LoadAsync(args);
-
-            await callComposite.DisposeAsync();
-
-            await callComposite.Invoking(c => c.JoinCallAsync(default))
-                .Should().ThrowExactlyAsync<ObjectDisposedException>()
-                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallComposite'.");
-
-            await callComposite.Invoking(c => c.LoadAsync(default))
-                .Should().ThrowExactlyAsync<ObjectDisposedException>()
-                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallComposite'.");
-
-            jsRuntime.VerifyAll();
-            module.VerifyAll();
+                parameters.Add(p => p.Adapter, adapter);
+            }))
+                .Should().ThrowExactly<InvalidOperationException>()
+                .WithMessage("The Adapter property must an instance of the CallAdapter class.");
         }
     }
 }

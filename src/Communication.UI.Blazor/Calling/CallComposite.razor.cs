@@ -12,165 +12,116 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
     /// <summary>
     /// Blazor component used wrap the CallComposite of Microsoft Azure Communication Services UI library.
     /// </summary>
-    public sealed partial class CallComposite : IAsyncDisposable, IDisposable
+    public sealed partial class CallComposite
     {
-        private IJSObjectReference? module;
-
-        private CallbackEvent? callbackEvent;
+        private static readonly CallControlOptions DefaultOptions = new CallControlOptions();
 
         private ElementReference callContainer;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="CallComposite"/> class.
-        /// </summary>
-        public CallComposite()
-        {
-            this.callbackEvent = new CallbackEvent(this);
-        }
-
-        /// <summary>
-        /// Gets or sets the <see cref="IJSRuntime"/> used to manage Microsoft JS CallComposite component.
-        /// </summary>
-        [Inject]
-        public IJSRuntime JSRuntime { get; set; } = default!;
-
-        /// <summary>
-        /// Gets or sets a callback when the call is ended.
+        /// Gets or sets the <see cref="CallAdapter"/> which provides the logic and data of the composite control.
+        /// The <see cref="CallComposite"/> can also be controlled using the adapter.
         /// </summary>
         [Parameter]
-        public EventCallback<CallAdapterCallEndedEvent> OnCallEnded { get; set; }
+        [EditorRequired]
+        public ICallAdapter? Adapter { get; set; }
 
         /// <summary>
-        /// Gets or sets a callback when a participant join the call.
+        /// Gets or sets a value indicating whether to
+        /// show or hide Camera Button during a call.
+        /// Default value: <see cref="true"/>.
         /// </summary>
         [Parameter]
-        public EventCallback<RemoteParticipantJoinedEvent> OnParticipantJoined { get; set; }
+        public bool CameraButton { get; set; } = DefaultOptions.CameraButton;
 
         /// <summary>
-        /// Gets or sets a callback when a participant leave the call.
+        /// Gets or sets a value indicating whether to
+        /// show or hide Devices button during a call.
+        /// Default value: <see cref="true"/>.
         /// </summary>
         [Parameter]
-        public EventCallback<RemoteParticipantLeftEvent> OnParticipantLeft { get; set; }
+        public bool DevicesButton { get; set; } = DefaultOptions.DevicesButton;
 
         /// <summary>
-        /// Gets a value indicating whether if the component has been loaded with the <see cref="LoadAsync(CallAdapterArgs)"/>
-        /// method.
+        /// Gets or sets a value indicating whether to
+        /// show or hide EndCall button during a call.
+        /// Default value: <see cref="true"/>.
         /// </summary>
-        public bool IsLoaded { get; private set; }
+        [Parameter]
+        public bool EndCallButton { get; set; } = DefaultOptions.EndCallButton;
 
         /// <summary>
-        /// Loads the composite component using the specified arguments.
+        /// Gets or sets a value indicating whether to
+        /// show or hide Microphone button during a call.
+        /// Default value: <see cref="true"/>.
         /// </summary>
-        /// <param name="args">Parameters of the composite component.</param>
-        /// <returns>A <see cref="Task"/> of the asynchronous operation.</returns>
-        public async Task LoadAsync(CallAdapterArgs args)
-        {
-            ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
-
-            await this.EnsureModuleLoadAsync();
-
-            await this.module!.InvokeVoidAsync("initialize", this.callContainer, args, this.callbackEvent.Reference);
-
-            this.IsLoaded = true;
-        }
+        [Parameter]
+        public bool MicrophoneButton { get; set; } = DefaultOptions.MicrophoneButton;
 
         /// <summary>
-        /// Join an existing call.
+        /// Gets or sets a value indicating whether to
+        /// show, hide or disable the more button during a call.
+        /// Default value: <see cref="true"/>.
         /// </summary>
-        /// <param name="options">Options of the call.</param>
-        /// <returns>A <see cref="Task"/> of the asynchronous operation.</returns>
-        /// <exception cref="InvalidOperationException">If the component has not been loaded.</exception>
-        public async Task JoinCallAsync(JoinCallOptions options)
-        {
-            ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
+        [Parameter]
+        public bool MoreButton { get; set; } = DefaultOptions.MoreButton;
 
-            if (!this.IsLoaded)
-            {
-                throw new InvalidOperationException("The component has not been loaded. Ensures that the LoadAsync() method has been called first.");
-            }
+        /// <summary>
+        /// Gets or sets a value indicating whether to
+        /// show, hide or disable participants button during a call.
+        /// Default value: <see cref="true"/>.
+        /// </summary>
+        [Parameter]
+        public bool ParticipantsButton { get; set; } = DefaultOptions.ParticipantsButton;
 
-            await this.EnsureModuleLoadAsync();
+        /// <summary>
+        /// Gets or sets a value indicating whether to
+        /// show, hide or disable the people button during a call.
+        /// Default value: <see cref="true"/>.
+        /// </summary>
+        [Parameter]
+        public bool PeopleButton { get; set; } = DefaultOptions.PeopleButton;
 
-            await this.module!.InvokeVoidAsync("adapterJoinCall", this.callContainer, options);
-        }
+        /// <summary>
+        /// Gets or sets a value indicating whether to
+        /// show, hide or disable the raise hand button during a call.
+        /// Default value: <see cref="true"/>.
+        /// </summary>
+        [Parameter]
+        public bool RaiseHandButton { get; set; } = DefaultOptions.RaiseHandButton;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to
+        /// show, hide or disable the screen share button during a call.
+        /// Default value: <see cref="true"/>.
+        /// </summary>
+        [Parameter]
+        public bool ScreenShareButton { get; set; } = DefaultOptions.ScreenShareButton;
 
         /// <inheritdoc />
-        public async ValueTask DisposeAsync()
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (this.module != null)
+            if (this.Adapter is not null)
             {
-                await this.module.InvokeVoidAsync("dispose", this.callContainer);
-                await this.module.DisposeAsync();
-
-                this.module = null;
-            }
-
-            this.Dispose();
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            if (this.callbackEvent != null)
-            {
-                this.callbackEvent.Dispose();
-                this.callbackEvent = null;
-            }
-        }
-
-        private async Task EnsureModuleLoadAsync()
-        {
-            if (this.module is null)
-            {
-                this.module = await this.JSRuntime.InvokeAsync<IJSObjectReference>(
-                    "import",
-                    "./_content/PosInformatique.Azure.Communication.UI.Blazor/Calling/CallComposite.razor.js");
-            }
-        }
-
-        private class CallbackEvent : IDisposable
-        {
-            private readonly CallComposite owner;
-
-            public CallbackEvent(CallComposite owner)
-            {
-                this.owner = owner;
-                this.Reference = DotNetObjectReference.Create(this);
-            }
-
-            public DotNetObjectReference<CallbackEvent>? Reference { get; private set; }
-
-            public void Dispose()
-            {
-                if (this.Reference != null)
+                if (this.Adapter is not CallAdapter adapter)
                 {
-                    this.Reference.Dispose();
-                    this.Reference = null;
+                    throw new InvalidOperationException("The Adapter property must an instance of the CallAdapter class.");
                 }
-            }
 
-            [JSInvokable]
-            public async Task OnCallEndedAsync(CallAdapterCallEndedEvent @event)
-            {
-                await this.owner.OnCallEnded.InvokeAsync(@event);
-            }
-
-            [JSInvokable]
-            public async Task OnParticipantsJoinedAsync(RemoteParticipant[] joined)
-            {
-                foreach (var participant in joined)
+                var options = new CallControlOptions()
                 {
-                    await this.owner.OnParticipantJoined.InvokeAsync(new RemoteParticipantJoinedEvent(participant));
-                }
-            }
+                    CameraButton = this.CameraButton,
+                    DevicesButton = this.DevicesButton,
+                    EndCallButton = this.EndCallButton,
+                    MicrophoneButton = this.MicrophoneButton,
+                    MoreButton = this.MoreButton,
+                    ParticipantsButton = this.ParticipantsButton,
+                    PeopleButton = this.PeopleButton,
+                    RaiseHandButton = this.RaiseHandButton,
+                    ScreenShareButton = this.ScreenShareButton,
+                };
 
-            [JSInvokable]
-            public async Task OnParticipantsLeftAsync(RemoteParticipant[] removed)
-            {
-                foreach (var participant in removed)
-                {
-                    await this.owner.OnParticipantLeft.InvokeAsync(new RemoteParticipantLeftEvent(participant));
-                }
+                await adapter.Module.InvokeVoidAsync("initializeControl", this.callContainer, adapter.Id, options);
             }
         }
     }
