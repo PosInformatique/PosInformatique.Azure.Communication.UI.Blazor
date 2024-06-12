@@ -196,6 +196,714 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
             module.VerifyAll();
         }
 
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Render_WithAdapter_WithNoChanges(bool value)
+        {
+            ElementReference elementReference = default;
+            Guid adapterId = default;
+
+            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
+            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initializeControl", It.IsAny<object[]>()))
+                .Callback((string _, object[] a) =>
+                {
+                    a.Should().HaveCount(3);
+
+                    elementReference = a[0].As<ElementReference>();
+                    adapterId = a[1].As<Guid>();
+
+                    a[2].Should().BeEquivalentTo(new CallControlOptions()
+                    {
+                        CameraButton = value,
+                        DevicesButton = value,
+                        EndCallButton = value,
+                        MicrophoneButton = value,
+                        MoreButton = value,
+                        ParticipantsButton = value,
+                        PeopleButton = value,
+                        RaiseHandButton = value,
+                        ScreenShareButton = value,
+                    });
+                })
+                .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
+
+            var adapter = new CallAdapter(module.Object);
+
+            // First render
+            var render = this.RenderComponent<CallComposite>(parameters =>
+            {
+                parameters.Add(p => p.Adapter, adapter);
+                parameters.Add(p => p.CameraButton, value);
+                parameters.Add(p => p.DevicesButton, value);
+                parameters.Add(p => p.EndCallButton, value);
+                parameters.Add(p => p.MicrophoneButton, value);
+                parameters.Add(p => p.MoreButton, value);
+                parameters.Add(p => p.ParticipantsButton, value);
+                parameters.Add(p => p.PeopleButton, value);
+                parameters.Add(p => p.RaiseHandButton, value);
+                parameters.Add(p => p.ScreenShareButton, value);
+            });
+
+            adapterId.Should().Be(adapter.Id);
+            render.Markup.Should().Be($"<div id=\"call-container\" style=\"height: 50vh\" blazor:elementReference=\"{elementReference.Id}\"></div>");
+
+            // Second render
+            render.Render();
+
+            render.Markup.Should().Be($"<div id=\"call-container\" style=\"height: 50vh\" blazor:elementReference=\"{elementReference.Id}\"></div>");
+
+            module.Verify(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initializeControl", It.IsAny<object[]>()), Times.Once);
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Render_WithAdapter_WithCameraButtonChange(bool value)
+        {
+            ElementReference elementReference = default;
+            Guid adapterId = default;
+
+            var calls = 0;
+
+            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
+            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initializeControl", It.IsAny<object[]>()))
+                .Callback((string _, object[] a) =>
+                {
+                    a.Should().HaveCount(3);
+
+                    elementReference = a[0].As<ElementReference>();
+                    adapterId = a[1].As<Guid>();
+
+                    if (calls >= 2)
+                    {
+                        throw new InvalidOperationException("Called to many times");
+                    }
+
+                    a[2].Should().BeEquivalentTo(new CallControlOptions()
+                    {
+                        CameraButton = calls == 0 ? value : !value,
+                        DevicesButton = value,
+                        EndCallButton = value,
+                        MicrophoneButton = value,
+                        MoreButton = value,
+                        ParticipantsButton = value,
+                        PeopleButton = value,
+                        RaiseHandButton = value,
+                        ScreenShareButton = value,
+                    });
+
+                    calls++;
+                })
+                .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
+
+            var adapter = new CallAdapter(module.Object);
+
+            // First render
+            var render = this.RenderComponent<CallComposite>(parameters =>
+            {
+                parameters.Add(p => p.Adapter, adapter);
+                parameters.Add(p => p.CameraButton, value);
+                parameters.Add(p => p.DevicesButton, value);
+                parameters.Add(p => p.EndCallButton, value);
+                parameters.Add(p => p.MicrophoneButton, value);
+                parameters.Add(p => p.MoreButton, value);
+                parameters.Add(p => p.ParticipantsButton, value);
+                parameters.Add(p => p.PeopleButton, value);
+                parameters.Add(p => p.RaiseHandButton, value);
+                parameters.Add(p => p.ScreenShareButton, value);
+            });
+
+            adapterId.Should().Be(adapter.Id);
+            render.Markup.Should().Be($"<div id=\"call-container\" style=\"height: 50vh\" blazor:elementReference=\"{elementReference.Id}\"></div>");
+
+            // Second render
+            render.SetParametersAndRender(parameters =>
+            {
+                parameters.Add(p => p.CameraButton, !value);
+            });
+
+            render.Markup.Should().Be($"<div id=\"call-container\" style=\"height: 50vh\" blazor:elementReference=\"{elementReference.Id}\"></div>");
+
+            module.Verify(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initializeControl", It.IsAny<object[]>()), Times.Exactly(2));
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Render_WithAdapter_WithDevicesButtonChange(bool value)
+        {
+            ElementReference elementReference = default;
+            Guid adapterId = default;
+
+            var calls = 0;
+
+            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
+            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initializeControl", It.IsAny<object[]>()))
+                .Callback((string _, object[] a) =>
+                {
+                    a.Should().HaveCount(3);
+
+                    elementReference = a[0].As<ElementReference>();
+                    adapterId = a[1].As<Guid>();
+
+                    if (calls >= 2)
+                    {
+                        throw new InvalidOperationException("Called to many times");
+                    }
+
+                    a[2].Should().BeEquivalentTo(new CallControlOptions()
+                    {
+                        CameraButton = value,
+                        DevicesButton = calls == 0 ? value : !value,
+                        EndCallButton = value,
+                        MicrophoneButton = value,
+                        MoreButton = value,
+                        ParticipantsButton = value,
+                        PeopleButton = value,
+                        RaiseHandButton = value,
+                        ScreenShareButton = value,
+                    });
+
+                    calls++;
+                })
+                .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
+
+            var adapter = new CallAdapter(module.Object);
+
+            // First render
+            var render = this.RenderComponent<CallComposite>(parameters =>
+            {
+                parameters.Add(p => p.Adapter, adapter);
+                parameters.Add(p => p.CameraButton, value);
+                parameters.Add(p => p.DevicesButton, value);
+                parameters.Add(p => p.EndCallButton, value);
+                parameters.Add(p => p.MicrophoneButton, value);
+                parameters.Add(p => p.MoreButton, value);
+                parameters.Add(p => p.ParticipantsButton, value);
+                parameters.Add(p => p.PeopleButton, value);
+                parameters.Add(p => p.RaiseHandButton, value);
+                parameters.Add(p => p.ScreenShareButton, value);
+            });
+
+            adapterId.Should().Be(adapter.Id);
+            render.Markup.Should().Be($"<div id=\"call-container\" style=\"height: 50vh\" blazor:elementReference=\"{elementReference.Id}\"></div>");
+
+            // Second render
+            render.SetParametersAndRender(parameters =>
+            {
+                parameters.Add(p => p.DevicesButton, !value);
+            });
+
+            render.Markup.Should().Be($"<div id=\"call-container\" style=\"height: 50vh\" blazor:elementReference=\"{elementReference.Id}\"></div>");
+
+            module.Verify(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initializeControl", It.IsAny<object[]>()), Times.Exactly(2));
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Render_WithAdapter_WithEndCallButtonChange(bool value)
+        {
+            ElementReference elementReference = default;
+            Guid adapterId = default;
+
+            var calls = 0;
+
+            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
+            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initializeControl", It.IsAny<object[]>()))
+                .Callback((string _, object[] a) =>
+                {
+                    a.Should().HaveCount(3);
+
+                    elementReference = a[0].As<ElementReference>();
+                    adapterId = a[1].As<Guid>();
+
+                    if (calls >= 2)
+                    {
+                        throw new InvalidOperationException("Called to many times");
+                    }
+
+                    a[2].Should().BeEquivalentTo(new CallControlOptions()
+                    {
+                        CameraButton = value,
+                        DevicesButton = value,
+                        EndCallButton = calls == 0 ? value : !value,
+                        MicrophoneButton = value,
+                        MoreButton = value,
+                        ParticipantsButton = value,
+                        PeopleButton = value,
+                        RaiseHandButton = value,
+                        ScreenShareButton = value,
+                    });
+
+                    calls++;
+                })
+                .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
+
+            var adapter = new CallAdapter(module.Object);
+
+            // First render
+            var render = this.RenderComponent<CallComposite>(parameters =>
+            {
+                parameters.Add(p => p.Adapter, adapter);
+                parameters.Add(p => p.CameraButton, value);
+                parameters.Add(p => p.DevicesButton, value);
+                parameters.Add(p => p.EndCallButton, value);
+                parameters.Add(p => p.MicrophoneButton, value);
+                parameters.Add(p => p.MoreButton, value);
+                parameters.Add(p => p.ParticipantsButton, value);
+                parameters.Add(p => p.PeopleButton, value);
+                parameters.Add(p => p.RaiseHandButton, value);
+                parameters.Add(p => p.ScreenShareButton, value);
+            });
+
+            adapterId.Should().Be(adapter.Id);
+            render.Markup.Should().Be($"<div id=\"call-container\" style=\"height: 50vh\" blazor:elementReference=\"{elementReference.Id}\"></div>");
+
+            // Second render
+            render.SetParametersAndRender(parameters =>
+            {
+                parameters.Add(p => p.EndCallButton, !value);
+            });
+
+            render.Markup.Should().Be($"<div id=\"call-container\" style=\"height: 50vh\" blazor:elementReference=\"{elementReference.Id}\"></div>");
+
+            module.Verify(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initializeControl", It.IsAny<object[]>()), Times.Exactly(2));
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Render_WithAdapter_WithMicrophoneButtonChange(bool value)
+        {
+            ElementReference elementReference = default;
+            Guid adapterId = default;
+
+            var calls = 0;
+
+            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
+            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initializeControl", It.IsAny<object[]>()))
+                .Callback((string _, object[] a) =>
+                {
+                    a.Should().HaveCount(3);
+
+                    elementReference = a[0].As<ElementReference>();
+                    adapterId = a[1].As<Guid>();
+
+                    if (calls >= 2)
+                    {
+                        throw new InvalidOperationException("Called to many times");
+                    }
+
+                    a[2].Should().BeEquivalentTo(new CallControlOptions()
+                    {
+                        CameraButton = value,
+                        DevicesButton = value,
+                        EndCallButton = value,
+                        MicrophoneButton = calls == 0 ? value : !value,
+                        MoreButton = value,
+                        ParticipantsButton = value,
+                        PeopleButton = value,
+                        RaiseHandButton = value,
+                        ScreenShareButton = value,
+                    });
+
+                    calls++;
+                })
+                .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
+
+            var adapter = new CallAdapter(module.Object);
+
+            // First render
+            var render = this.RenderComponent<CallComposite>(parameters =>
+            {
+                parameters.Add(p => p.Adapter, adapter);
+                parameters.Add(p => p.CameraButton, value);
+                parameters.Add(p => p.DevicesButton, value);
+                parameters.Add(p => p.EndCallButton, value);
+                parameters.Add(p => p.MicrophoneButton, value);
+                parameters.Add(p => p.MoreButton, value);
+                parameters.Add(p => p.ParticipantsButton, value);
+                parameters.Add(p => p.PeopleButton, value);
+                parameters.Add(p => p.RaiseHandButton, value);
+                parameters.Add(p => p.ScreenShareButton, value);
+            });
+
+            adapterId.Should().Be(adapter.Id);
+            render.Markup.Should().Be($"<div id=\"call-container\" style=\"height: 50vh\" blazor:elementReference=\"{elementReference.Id}\"></div>");
+
+            // Second render
+            render.SetParametersAndRender(parameters =>
+            {
+                parameters.Add(p => p.MicrophoneButton, !value);
+            });
+
+            render.Markup.Should().Be($"<div id=\"call-container\" style=\"height: 50vh\" blazor:elementReference=\"{elementReference.Id}\"></div>");
+
+            module.Verify(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initializeControl", It.IsAny<object[]>()), Times.Exactly(2));
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Render_WithAdapter_WithMoreButtonChange(bool value)
+        {
+            ElementReference elementReference = default;
+            Guid adapterId = default;
+
+            var calls = 0;
+
+            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
+            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initializeControl", It.IsAny<object[]>()))
+                .Callback((string _, object[] a) =>
+                {
+                    a.Should().HaveCount(3);
+
+                    elementReference = a[0].As<ElementReference>();
+                    adapterId = a[1].As<Guid>();
+
+                    if (calls >= 2)
+                    {
+                        throw new InvalidOperationException("Called to many times");
+                    }
+
+                    a[2].Should().BeEquivalentTo(new CallControlOptions()
+                    {
+                        CameraButton = value,
+                        DevicesButton = value,
+                        EndCallButton = value,
+                        MicrophoneButton = value,
+                        MoreButton = calls == 0 ? value : !value,
+                        ParticipantsButton = value,
+                        PeopleButton = value,
+                        RaiseHandButton = value,
+                        ScreenShareButton = value,
+                    });
+
+                    calls++;
+                })
+                .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
+
+            var adapter = new CallAdapter(module.Object);
+
+            // First render
+            var render = this.RenderComponent<CallComposite>(parameters =>
+            {
+                parameters.Add(p => p.Adapter, adapter);
+                parameters.Add(p => p.CameraButton, value);
+                parameters.Add(p => p.DevicesButton, value);
+                parameters.Add(p => p.EndCallButton, value);
+                parameters.Add(p => p.MicrophoneButton, value);
+                parameters.Add(p => p.MoreButton, value);
+                parameters.Add(p => p.ParticipantsButton, value);
+                parameters.Add(p => p.PeopleButton, value);
+                parameters.Add(p => p.RaiseHandButton, value);
+                parameters.Add(p => p.ScreenShareButton, value);
+            });
+
+            adapterId.Should().Be(adapter.Id);
+            render.Markup.Should().Be($"<div id=\"call-container\" style=\"height: 50vh\" blazor:elementReference=\"{elementReference.Id}\"></div>");
+
+            // Second render
+            render.SetParametersAndRender(parameters =>
+            {
+                parameters.Add(p => p.MoreButton, !value);
+            });
+
+            render.Markup.Should().Be($"<div id=\"call-container\" style=\"height: 50vh\" blazor:elementReference=\"{elementReference.Id}\"></div>");
+
+            module.Verify(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initializeControl", It.IsAny<object[]>()), Times.Exactly(2));
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Render_WithAdapter_WithParticipantsButtonChange(bool value)
+        {
+            ElementReference elementReference = default;
+            Guid adapterId = default;
+
+            var calls = 0;
+
+            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
+            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initializeControl", It.IsAny<object[]>()))
+                .Callback((string _, object[] a) =>
+                {
+                    a.Should().HaveCount(3);
+
+                    elementReference = a[0].As<ElementReference>();
+                    adapterId = a[1].As<Guid>();
+
+                    if (calls >= 2)
+                    {
+                        throw new InvalidOperationException("Called to many times");
+                    }
+
+                    a[2].Should().BeEquivalentTo(new CallControlOptions()
+                    {
+                        CameraButton = value,
+                        DevicesButton = value,
+                        EndCallButton = value,
+                        MicrophoneButton = value,
+                        MoreButton = value,
+                        ParticipantsButton = calls == 0 ? value : !value,
+                        PeopleButton = value,
+                        RaiseHandButton = value,
+                        ScreenShareButton = value,
+                    });
+
+                    calls++;
+                })
+                .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
+
+            var adapter = new CallAdapter(module.Object);
+
+            // First render
+            var render = this.RenderComponent<CallComposite>(parameters =>
+            {
+                parameters.Add(p => p.Adapter, adapter);
+                parameters.Add(p => p.CameraButton, value);
+                parameters.Add(p => p.DevicesButton, value);
+                parameters.Add(p => p.EndCallButton, value);
+                parameters.Add(p => p.MicrophoneButton, value);
+                parameters.Add(p => p.MoreButton, value);
+                parameters.Add(p => p.ParticipantsButton, value);
+                parameters.Add(p => p.PeopleButton, value);
+                parameters.Add(p => p.RaiseHandButton, value);
+                parameters.Add(p => p.ScreenShareButton, value);
+            });
+
+            adapterId.Should().Be(adapter.Id);
+            render.Markup.Should().Be($"<div id=\"call-container\" style=\"height: 50vh\" blazor:elementReference=\"{elementReference.Id}\"></div>");
+
+            // Second render
+            render.SetParametersAndRender(parameters =>
+            {
+                parameters.Add(p => p.ParticipantsButton, !value);
+            });
+
+            render.Markup.Should().Be($"<div id=\"call-container\" style=\"height: 50vh\" blazor:elementReference=\"{elementReference.Id}\"></div>");
+
+            module.Verify(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initializeControl", It.IsAny<object[]>()), Times.Exactly(2));
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Render_WithAdapter_WithPeopleButtonChange(bool value)
+        {
+            ElementReference elementReference = default;
+            Guid adapterId = default;
+
+            var calls = 0;
+
+            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
+            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initializeControl", It.IsAny<object[]>()))
+                .Callback((string _, object[] a) =>
+                {
+                    a.Should().HaveCount(3);
+
+                    elementReference = a[0].As<ElementReference>();
+                    adapterId = a[1].As<Guid>();
+
+                    if (calls >= 2)
+                    {
+                        throw new InvalidOperationException("Called to many times");
+                    }
+
+                    a[2].Should().BeEquivalentTo(new CallControlOptions()
+                    {
+                        CameraButton = value,
+                        DevicesButton = value,
+                        EndCallButton = value,
+                        MicrophoneButton = value,
+                        MoreButton = value,
+                        ParticipantsButton = value,
+                        PeopleButton = calls == 0 ? value : !value,
+                        RaiseHandButton = value,
+                        ScreenShareButton = value,
+                    });
+
+                    calls++;
+                })
+                .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
+
+            var adapter = new CallAdapter(module.Object);
+
+            // First render
+            var render = this.RenderComponent<CallComposite>(parameters =>
+            {
+                parameters.Add(p => p.Adapter, adapter);
+                parameters.Add(p => p.CameraButton, value);
+                parameters.Add(p => p.DevicesButton, value);
+                parameters.Add(p => p.EndCallButton, value);
+                parameters.Add(p => p.MicrophoneButton, value);
+                parameters.Add(p => p.MoreButton, value);
+                parameters.Add(p => p.ParticipantsButton, value);
+                parameters.Add(p => p.PeopleButton, value);
+                parameters.Add(p => p.RaiseHandButton, value);
+                parameters.Add(p => p.ScreenShareButton, value);
+            });
+
+            adapterId.Should().Be(adapter.Id);
+            render.Markup.Should().Be($"<div id=\"call-container\" style=\"height: 50vh\" blazor:elementReference=\"{elementReference.Id}\"></div>");
+
+            // Second render
+            render.SetParametersAndRender(parameters =>
+            {
+                parameters.Add(p => p.PeopleButton, !value);
+            });
+
+            render.Markup.Should().Be($"<div id=\"call-container\" style=\"height: 50vh\" blazor:elementReference=\"{elementReference.Id}\"></div>");
+
+            module.Verify(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initializeControl", It.IsAny<object[]>()), Times.Exactly(2));
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Render_WithAdapter_WithRaiseHandButtonChange(bool value)
+        {
+            ElementReference elementReference = default;
+            Guid adapterId = default;
+
+            var calls = 0;
+
+            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
+            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initializeControl", It.IsAny<object[]>()))
+                .Callback((string _, object[] a) =>
+                {
+                    a.Should().HaveCount(3);
+
+                    elementReference = a[0].As<ElementReference>();
+                    adapterId = a[1].As<Guid>();
+
+                    if (calls >= 2)
+                    {
+                        throw new InvalidOperationException("Called to many times");
+                    }
+
+                    a[2].Should().BeEquivalentTo(new CallControlOptions()
+                    {
+                        CameraButton = value,
+                        DevicesButton = value,
+                        EndCallButton = value,
+                        MicrophoneButton = value,
+                        MoreButton = value,
+                        ParticipantsButton = value,
+                        PeopleButton = value,
+                        RaiseHandButton = calls == 0 ? value : !value,
+                        ScreenShareButton = value,
+                    });
+
+                    calls++;
+                })
+                .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
+
+            var adapter = new CallAdapter(module.Object);
+
+            // First render
+            var render = this.RenderComponent<CallComposite>(parameters =>
+            {
+                parameters.Add(p => p.Adapter, adapter);
+                parameters.Add(p => p.CameraButton, value);
+                parameters.Add(p => p.DevicesButton, value);
+                parameters.Add(p => p.EndCallButton, value);
+                parameters.Add(p => p.MicrophoneButton, value);
+                parameters.Add(p => p.MoreButton, value);
+                parameters.Add(p => p.ParticipantsButton, value);
+                parameters.Add(p => p.PeopleButton, value);
+                parameters.Add(p => p.RaiseHandButton, value);
+                parameters.Add(p => p.ScreenShareButton, value);
+            });
+
+            adapterId.Should().Be(adapter.Id);
+            render.Markup.Should().Be($"<div id=\"call-container\" style=\"height: 50vh\" blazor:elementReference=\"{elementReference.Id}\"></div>");
+
+            // Second render
+            render.SetParametersAndRender(parameters =>
+            {
+                parameters.Add(p => p.RaiseHandButton, !value);
+            });
+
+            render.Markup.Should().Be($"<div id=\"call-container\" style=\"height: 50vh\" blazor:elementReference=\"{elementReference.Id}\"></div>");
+
+            module.Verify(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initializeControl", It.IsAny<object[]>()), Times.Exactly(2));
+        }
+
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void Render_WithAdapter_WithScreenShareButtonChange(bool value)
+        {
+            ElementReference elementReference = default;
+            Guid adapterId = default;
+
+            var calls = 0;
+
+            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
+            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initializeControl", It.IsAny<object[]>()))
+                .Callback((string _, object[] a) =>
+                {
+                    a.Should().HaveCount(3);
+
+                    elementReference = a[0].As<ElementReference>();
+                    adapterId = a[1].As<Guid>();
+
+                    if (calls >= 2)
+                    {
+                        throw new InvalidOperationException("Called to many times");
+                    }
+
+                    a[2].Should().BeEquivalentTo(new CallControlOptions()
+                    {
+                        CameraButton = value,
+                        DevicesButton = value,
+                        EndCallButton = value,
+                        MicrophoneButton = value,
+                        MoreButton = value,
+                        ParticipantsButton = value,
+                        PeopleButton = value,
+                        RaiseHandButton = value,
+                        ScreenShareButton = calls == 0 ? value : !value,
+                    });
+
+                    calls++;
+                })
+                .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
+
+            var adapter = new CallAdapter(module.Object);
+
+            // First render
+            var render = this.RenderComponent<CallComposite>(parameters =>
+            {
+                parameters.Add(p => p.Adapter, adapter);
+                parameters.Add(p => p.CameraButton, value);
+                parameters.Add(p => p.DevicesButton, value);
+                parameters.Add(p => p.EndCallButton, value);
+                parameters.Add(p => p.MicrophoneButton, value);
+                parameters.Add(p => p.MoreButton, value);
+                parameters.Add(p => p.ParticipantsButton, value);
+                parameters.Add(p => p.PeopleButton, value);
+                parameters.Add(p => p.RaiseHandButton, value);
+                parameters.Add(p => p.ScreenShareButton, value);
+            });
+
+            adapterId.Should().Be(adapter.Id);
+            render.Markup.Should().Be($"<div id=\"call-container\" style=\"height: 50vh\" blazor:elementReference=\"{elementReference.Id}\"></div>");
+
+            // Second render
+            render.SetParametersAndRender(parameters =>
+            {
+                parameters.Add(p => p.ScreenShareButton, !value);
+            });
+
+            render.Markup.Should().Be($"<div id=\"call-container\" style=\"height: 50vh\" blazor:elementReference=\"{elementReference.Id}\"></div>");
+
+            module.Verify(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("initializeControl", It.IsAny<object[]>()), Times.Exactly(2));
+        }
+
         [Fact]
         public void Render_WithNoCallAdapter()
         {

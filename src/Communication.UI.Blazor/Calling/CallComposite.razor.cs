@@ -18,6 +18,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
 
         private ElementReference callContainer;
 
+        private CallControlOptions? lastControlOptions;
+
         /// <summary>
         /// Gets or sets the <see cref="CallAdapter"/> which provides the logic and data of the composite control.
         /// The <see cref="CallComposite"/> can also be controlled using the adapter.
@@ -121,8 +123,68 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
                     ScreenShareButton = this.ScreenShareButton,
                 };
 
-                await adapter.Module.InvokeVoidAsync("initializeControl", this.callContainer, adapter.Id, options);
+                if (this.ControlOptionsHasBeenChanged(options))
+                {
+                    await adapter.Module.InvokeVoidAsync("initializeControl", this.callContainer, adapter.Id, options);
+
+                    this.lastControlOptions = options;
+                }
             }
+        }
+
+        private bool ControlOptionsHasBeenChanged(CallControlOptions newOptions)
+        {
+            if (this.lastControlOptions is null)
+            {
+                return true;
+            }
+
+            if (this.lastControlOptions.CameraButton != newOptions.CameraButton)
+            {
+                return true;
+            }
+
+            if (this.lastControlOptions.DevicesButton != newOptions.DevicesButton)
+            {
+                return true;
+            }
+
+            if (this.lastControlOptions.EndCallButton != newOptions.EndCallButton)
+            {
+                return true;
+            }
+
+            if (this.lastControlOptions.MicrophoneButton != newOptions.MicrophoneButton)
+            {
+                return true;
+            }
+
+            if (this.lastControlOptions.MoreButton != newOptions.MoreButton)
+            {
+                return true;
+            }
+
+            if (this.lastControlOptions.ParticipantsButton != newOptions.ParticipantsButton)
+            {
+                return true;
+            }
+
+            if (this.lastControlOptions.PeopleButton != newOptions.PeopleButton)
+            {
+                return true;
+            }
+
+            if (this.lastControlOptions.RaiseHandButton != newOptions.RaiseHandButton)
+            {
+                return true;
+            }
+
+            if (this.lastControlOptions.ScreenShareButton != newOptions.ScreenShareButton)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
