@@ -59,35 +59,19 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         }
 
         /// <inheritdoc />
+        public async Task LowerHandAsync()
+        {
+            ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
+
+            await this.Module.InvokeVoidAsync("adapterLowerHand", this.Id);
+        }
+
+        /// <inheritdoc />
         public async Task MuteAsync()
         {
             ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
 
             await this.Module.InvokeVoidAsync("adapterMute", this.Id);
-        }
-
-        /// <inheritdoc />
-        public async Task UnmuteAsync()
-        {
-            ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
-
-            await this.Module.InvokeVoidAsync("adapterUnmute", this.Id);
-        }
-
-        /// <inheritdoc />
-        public async Task StartScreenShareAsync()
-        {
-            ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
-
-            await this.Module.InvokeVoidAsync("adapterStartScreenShare", this.Id);
-        }
-
-        /// <inheritdoc />
-        public async Task StopScreenShareAsync()
-        {
-            ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
-
-            await this.Module.InvokeVoidAsync("adapterStopScreenShare", this.Id);
         }
 
         /// <inheritdoc />
@@ -112,6 +96,38 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
             ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
 
             return await this.Module.InvokeAsync<IReadOnlyList<AudioDeviceInfo>>("adapterQuerySpeakers", this.Id);
+        }
+
+        /// <inheritdoc />
+        public async Task RaiseHandAsync()
+        {
+            ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
+
+            await this.Module.InvokeVoidAsync("adapterRaiseHand", this.Id);
+        }
+
+        /// <inheritdoc />
+        public async Task StartScreenShareAsync()
+        {
+            ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
+
+            await this.Module.InvokeVoidAsync("adapterStartScreenShare", this.Id);
+        }
+
+        /// <inheritdoc />
+        public async Task StopScreenShareAsync()
+        {
+            ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
+
+            await this.Module.InvokeVoidAsync("adapterStopScreenShare", this.Id);
+        }
+
+        /// <inheritdoc />
+        public async Task UnmuteAsync()
+        {
+            ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
+
+            await this.Module.InvokeVoidAsync("adapterUnmute", this.Id);
         }
 
         /// <inheritdoc />

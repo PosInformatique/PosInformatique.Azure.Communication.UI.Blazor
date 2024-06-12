@@ -62,6 +62,13 @@ export async function adapterLeaveCall(id, forEveryone) {
     await adapter.leaveCall(forEveryone);
 }
 
+export async function adapterLowerHand(id) {
+
+    const adapter = getAdapter(id);
+
+    await adapter.lowerHand();
+}
+
 export async function adapterMute(id) {
 
     const adapter = getAdapter(id);
@@ -96,11 +103,11 @@ export async function adapterQuerySpeakers(id) {
     return cameras.map(createAudioDevice)
 }
 
-export async function adapterUnmute(id) {
+export async function adapterRaiseHand(id) {
 
     const adapter = getAdapter(id);
 
-    await adapter.unmute();
+    await adapter.raiseHand();
 }
 
 export async function adapterStartScreenShare(id) {
@@ -115,6 +122,13 @@ export async function adapterStopScreenShare(id) {
     const adapter = getAdapter(id);
 
     await adapter.stopScreenShare();
+}
+
+export async function adapterUnmute(id) {
+
+    const adapter = getAdapter(id);
+
+    await adapter.unmute();
 }
 
 export function dispose(id) {

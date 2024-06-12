@@ -138,6 +138,11 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
             this.speakers = await this.callAdapter.QuerySpeakersAsync();
         }
 
+        private async Task LowerHandAsync()
+        {
+            await this.callAdapter!.LowerHandAsync();
+        }
+
         private async Task MuteAsync()
         {
             await this.callAdapter!.MuteAsync();
@@ -146,6 +151,11 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
         private async Task UnmuteAsync()
         {
             await this.callAdapter!.UnmuteAsync();
+        }
+
+        private async Task RaiseHandAsync()
+        {
+            await this.callAdapter!.RaiseHandAsync();
         }
 
         private async Task StartScreenShareAsync()

@@ -60,6 +60,9 @@
 
     <button @onclick="this.StartScreenShareAsync" disabled="@(this.callAdapter is null)">Start screen share</button>
     <button @onclick="this.StopScreenShareAsync" disabled="@(this.callAdapter is null)">Stop screen share</button>
+
+    <button @onclick="this.LowerHandAsync" disabled="@(this.callAdapter is null)">Lower hand</button>
+    <button @onclick="this.RaiseHandAsync" disabled="@(this.callAdapter is null)">Raise hand</button>
 </div>
 <div>
     <label for="cameras">Available cameras:</label>

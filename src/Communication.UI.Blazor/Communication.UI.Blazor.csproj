@@ -13,9 +13,11 @@
     <PackageReleaseNotes>
       1.2.0
       - Add the following APIs in the CallAdapter:
-        - QueryCameras()
-        - QueryMicrophones()
-        - QuerySpeakers()
+        - QueryCamerasAsync()
+        - QueryMicrophonesAsync()
+        - QuerySpeakersAsync()
+        - LowerHandAsync()
+        - RaiseHandAsync()
 
       1.1.0
       - Refactoring to separate the CallAdapter and the CallComposite to reflect the architecture of the Communication UI Library.

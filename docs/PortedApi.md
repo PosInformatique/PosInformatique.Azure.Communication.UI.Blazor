@@ -39,8 +39,8 @@ which has been ported to this library.
 | setSpeaker                    | TODO       |                                                      |
 | startCaptions                 | TODO       |                                                      |
 | stopCaptions                  | TODO       |                                                      |
-| raiseHand                     | TODO       |                                                      |
-| lowerHand                     | TODO       |                                                      |
+| raiseHand                     | **Done**   |                                                      |
+| lowerHand                     | **Done**   |                                                      |
 | setCaptionLanguage            | TODO       |                                                      |
 | setSpokenLanguage             | TODO       |                                                      |
 | submitSurvey                  | TODO       |                                                      |

@@ -100,6 +100,11 @@ To retrieve the list of available microphones call the `QueryMicrophonesAsync()`
 
 To retrieve the list of available speakers call the `QuerySpeakersAsync()` method.
 
+### Raise/Lower the hand
+To raise the hand during a call, call the `RaiseHandAsync()` method.
+
+To lower the hand during a call, call the `LowerHandAsync()` method.
+
 ### Events
 You can subsribe to the following asynchronous events using a standard delegate method:
 - `OnCallEnded`: Occurs then the call is ended.

@@ -45,6 +45,10 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
                 .Should().ThrowExactlyAsync<ObjectDisposedException>()
                 .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
 
+            await callAdapter.Invoking(c => c.LowerHandAsync())
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
+
             await callAdapter.Invoking(c => c.MuteAsync())
                 .Should().ThrowExactlyAsync<ObjectDisposedException>()
                 .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
@@ -58,6 +62,10 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
                 .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
 
             await callAdapter.Invoking(c => c.QuerySpeakersAsync())
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
+
+            await callAdapter.Invoking(c => c.RaiseHandAsync())
                 .Should().ThrowExactlyAsync<ObjectDisposedException>()
                 .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
 
@@ -79,6 +87,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
         [Fact]
         public async Task InitializeAsync()
         {
+            Guid adapterId = default;
+
             var args = new CallAdapterArgs(default, default, default);
 
             object callBackReference = null;
@@ -88,7 +98,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
                 .Callback((string _, object[] a) =>
                 {
                     a.Should().HaveCount(3);
-                    a[0].As<Guid>().Should().NotBeEmpty();
+
+                    adapterId = a[0].As<Guid>();
                     a[1].Should().BeSameAs(args);
 
                     callBackReference = a[2].GetPropertyValue("Value");
@@ -98,6 +109,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
             var adapter = new CallAdapter(module.Object);
 
             await adapter.InitializeAsync(args);
+
+            adapterId.Should().Be(adapter.Id);
 
             // Check the OnCallEnded event
             var endedEvent = new CallEndedEvent(default);
@@ -177,6 +190,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
         [Fact]
         public async Task JoinCallAsync()
         {
+            Guid adapterId = default;
+
             var options = new JoinCallOptions();
 
             var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
@@ -184,7 +199,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
                 .Callback((string _, object[] a) =>
                 {
                     a.Should().HaveCount(2);
-                    a[0].As<Guid>().Should().NotBeEmpty();
+
+                    adapterId = a[0].As<Guid>();
                     a[1].Should().BeSameAs(options);
                 })
                 .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
@@ -192,6 +208,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
             var adapter = new CallAdapter(module.Object);
 
             await adapter.JoinCallAsync(options);
+
+            adapterId.Should().Be(adapter.Id);
 
             module.VerifyAll();
         }
@@ -211,6 +229,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
         [Fact]
         public async Task LeaveCallAsyncAsync()
         {
+            Guid adapterId = default;
+
             var options = new JoinCallOptions();
 
             var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
@@ -218,7 +238,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
                 .Callback((string _, object[] a) =>
                 {
                     a.Should().HaveCount(2);
-                    a[0].As<Guid>().Should().NotBeEmpty();
+
+                    adapterId = a[0].As<Guid>();
                     a[1].Should().Be(true);
                 })
                 .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
@@ -226,6 +247,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
             var adapter = new CallAdapter(module.Object);
 
             await adapter.LeaveCallAsync(true);
+
+            adapterId.Should().Be(adapter.Id);
 
             module.VerifyAll();
         }
@@ -243,20 +266,63 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
         }
 
         [Fact]
+        public async Task LowerHandAsync()
+        {
+            Guid adapterId = default;
+
+            var options = new JoinCallOptions();
+
+            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
+            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("adapterLowerHand", It.IsAny<object[]>()))
+                .Callback((string _, object[] a) =>
+                {
+                    a.Should().HaveCount(1);
+
+                    adapterId = a[0].As<Guid>();
+                })
+                .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
+
+            var adapter = new CallAdapter(module.Object);
+
+            await adapter.LowerHandAsync();
+
+            adapterId.Should().Be(adapter.Id);
+
+            module.VerifyAll();
+        }
+
+        [Fact]
+        public async Task LowerHandAsync_AlreadyDisposed()
+        {
+            var adapter = new CallAdapter(default);
+
+            adapter.Dispose();
+
+            await adapter.Invoking(c => c.LowerHandAsync())
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
+        }
+
+        [Fact]
         public async Task MuteAsync()
         {
+            Guid adapterId = default;
+
             var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
             module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("adapterMute", It.IsAny<object[]>()))
                 .Callback((string _, object[] a) =>
                 {
                     a.Should().HaveCount(1);
-                    a[0].As<Guid>().Should().NotBeEmpty();
+
+                    adapterId = a[0].As<Guid>();
                 })
                 .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
 
             var adapter = new CallAdapter(module.Object);
 
             await adapter.MuteAsync();
+
+            adapterId.Should().Be(adapter.Id);
 
             module.VerifyAll();
         }
@@ -276,6 +342,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
         [Fact]
         public async Task QueryCamerasAsync()
         {
+            Guid adapterId = default;
+
             var devices = Array.Empty<VideoDeviceInfo>();
 
             var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
@@ -283,7 +351,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
                 .Callback((string _, object[] a) =>
                 {
                     a.Should().HaveCount(1);
-                    a[0].As<Guid>().Should().NotBeEmpty();
+
+                    adapterId = a[0].As<Guid>();
                 })
                 .ReturnsAsync(devices);
 
@@ -291,6 +360,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
 
             var result = await adapter.QueryCamerasAsync();
 
+            adapterId.Should().Be(adapter.Id);
             result.Should().BeSameAs(devices);
 
             module.VerifyAll();
@@ -311,6 +381,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
         [Fact]
         public async Task QueryMicrophonesAsync()
         {
+            Guid adapterId = default;
+
             var devices = Array.Empty<AudioDeviceInfo>();
 
             var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
@@ -318,7 +390,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
                 .Callback((string _, object[] a) =>
                 {
                     a.Should().HaveCount(1);
-                    a[0].As<Guid>().Should().NotBeEmpty();
+
+                    adapterId = a[0].As<Guid>();
                 })
                 .ReturnsAsync(devices);
 
@@ -326,6 +399,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
 
             var result = await adapter.QueryMicrophonesAsync();
 
+            adapterId.Should().Be(adapter.Id);
             result.Should().BeSameAs(devices);
 
             module.VerifyAll();
@@ -346,6 +420,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
         [Fact]
         public async Task QuerySpeakersAsync()
         {
+            Guid adapterId = default;
+
             var devices = Array.Empty<AudioDeviceInfo>();
 
             var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
@@ -353,7 +429,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
                 .Callback((string _, object[] a) =>
                 {
                     a.Should().HaveCount(1);
-                    a[0].As<Guid>().Should().NotBeEmpty();
+
+                    adapterId = a[0].As<Guid>();
                 })
                 .ReturnsAsync(devices);
 
@@ -361,6 +438,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
 
             var result = await adapter.QuerySpeakersAsync();
 
+            adapterId.Should().Be(adapter.Id);
             result.Should().BeSameAs(devices);
 
             module.VerifyAll();
@@ -379,20 +457,63 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
         }
 
         [Fact]
+        public async Task RaiseHandAsync()
+        {
+            Guid adapterId = default;
+
+            var options = new JoinCallOptions();
+
+            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
+            module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("adapterRaiseHand", It.IsAny<object[]>()))
+                .Callback((string _, object[] a) =>
+                {
+                    a.Should().HaveCount(1);
+
+                    adapterId = a[0].As<Guid>();
+                })
+                .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
+
+            var adapter = new CallAdapter(module.Object);
+
+            await adapter.RaiseHandAsync();
+
+            adapterId.Should().Be(adapter.Id);
+
+            module.VerifyAll();
+        }
+
+        [Fact]
+        public async Task RaiseHandAsync_AlreadyDisposed()
+        {
+            var adapter = new CallAdapter(default);
+
+            adapter.Dispose();
+
+            await adapter.Invoking(c => c.RaiseHandAsync())
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
+        }
+
+        [Fact]
         public async Task StartScreenShareAsync()
         {
+            Guid adapterId = default;
+
             var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
             module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("adapterStartScreenShare", It.IsAny<object[]>()))
                 .Callback((string _, object[] a) =>
                 {
                     a.Should().HaveCount(1);
-                    a[0].As<Guid>().Should().NotBeEmpty();
+
+                    adapterId = a[0].As<Guid>();
                 })
                 .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
 
             var adapter = new CallAdapter(module.Object);
 
             await adapter.StartScreenShareAsync();
+
+            adapterId.Should().Be(adapter.Id);
 
             module.VerifyAll();
         }
@@ -412,18 +533,23 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
         [Fact]
         public async Task StopScreenShareAsync()
         {
+            Guid adapterId = default;
+
             var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
             module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("adapterStopScreenShare", It.IsAny<object[]>()))
                 .Callback((string _, object[] a) =>
                 {
                     a.Should().HaveCount(1);
-                    a[0].As<Guid>().Should().NotBeEmpty();
+
+                    adapterId = a[0].As<Guid>();
                 })
                 .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
 
             var adapter = new CallAdapter(module.Object);
 
             await adapter.StopScreenShareAsync();
+
+            adapterId.Should().Be(adapter.Id);
 
             module.VerifyAll();
         }
@@ -443,18 +569,23 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
         [Fact]
         public async Task UnmuteAsync()
         {
+            Guid adapterId = default;
+
             var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
             module.Setup(m => m.InvokeAsync<Microsoft.JSInterop.Infrastructure.IJSVoidResult>("adapterUnmute", It.IsAny<object[]>()))
                 .Callback((string _, object[] a) =>
                 {
                     a.Should().HaveCount(1);
-                    a[0].As<Guid>().Should().NotBeEmpty();
+
+                    adapterId = a[0].As<Guid>();
                 })
                 .ReturnsAsync((Microsoft.JSInterop.Infrastructure.IJSVoidResult)null);
 
             var adapter = new CallAdapter(module.Object);
 
             await adapter.UnmuteAsync();
+
+            adapterId.Should().Be(adapter.Id);
 
             module.VerifyAll();
         }
