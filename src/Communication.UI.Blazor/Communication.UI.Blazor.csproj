@@ -11,6 +11,10 @@
     <PackageProjectUrl>https://github.com/PosInformatique/PosInformatique.Azure.Communication.UI.Blazor</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>
+      1.2.0
+      - Add the following APIs in the CallAdapter:
+        - QueryCameras()
+
       1.1.0
       - Refactoring to separate the CallAdapter and the CallComposite to reflect the architecture of the Communication UI Library.
         This refactoring required now a service which will let the developer to create the CallAdapter.

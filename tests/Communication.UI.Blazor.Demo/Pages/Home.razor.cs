@@ -168,35 +168,35 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
 
         private async Task OnCallEnded(CallEndedEvent @event)
         {
-            this.Log($"Call ended (CallId: {@event.CallId})");
+            this.Log("OnCallEnded", $"Call ended (CallId: {@event.CallId})");
 
             await Task.CompletedTask;
         }
 
         private async Task OnMicrophoneMuteChanged(MicrophoneMuteChangedEvent @event)
         {
-            this.Log($"Microphone mute changed. (IsMuted: {@event.IsMuted}, ParticipantId: {@event.ParticipantId.CommunicationUserId})");
+            this.Log("OnMicrophoneMuteChanged", $"Microphone mute changed. (IsMuted: {@event.IsMuted}, ParticipantId: {@event.ParticipantId.CommunicationUserId})");  ;
 
             await Task.CompletedTask;
         }
 
         private async Task OnParticipantJoined(RemoteParticipantJoinedEvent @event)
         {
-            this.Log($"{@event.Participant.DisplayName} has join the call. (ID: {@event.Participant.Identifier.CommunicationUserId})");
+            this.Log("OnParticipantJoined", $"{@event.Participant.DisplayName} has join the call. (ID: {@event.Participant.Identifier.CommunicationUserId})");
 
             await Task.CompletedTask;
         }
 
         private async Task OnParticipantLeft(RemoteParticipantLeftEvent @event)
         {
-            this.Log($"{@event.Participant.DisplayName} has left the call. (ID: {@event.Participant.Identifier.CommunicationUserId})");
+            this.Log("OnParticipantLeft", $"{@event.Participant.DisplayName} has left the call. (ID: {@event.Participant.Identifier.CommunicationUserId})");
 
             await Task.CompletedTask;
         }
 
-        private void Log(string message)
+        private void Log(string @event, string message)
         {
-            this.log.Add(message);
+            this.log.Add($"{@event}: {message}");
 
             this.StateHasChanged();
         }
