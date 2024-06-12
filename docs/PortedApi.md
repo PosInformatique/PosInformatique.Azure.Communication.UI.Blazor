@@ -32,8 +32,8 @@ which has been ported to this library.
 | disposeStreamView             | TODO       |                                                      |
 | askDevicePermission           | TODO       |                                                      |
 | queryCameras                  | **Done**   |                                                      |
-| queryMicrophones              | TODO       |                                                      |
-| querySpeakers                 | TODO       |                                                      |
+| queryMicrophones              | **Done**   |                                                      |
+| querySpeakers                 | **Done**   |                                                      |
 | setCamera                     | TODO       |                                                      |
 | setMicrophone                 | TODO       |                                                      |
 | setSpeaker                    | TODO       |                                                      |

@@ -75,7 +75,25 @@ export async function adapterQueryCameras(id) {
 
     var cameras = await adapter.queryCameras();
 
-    return cameras.map(createCameraDevice)
+    return cameras.map(createVideoDevice)
+}
+
+export async function adapterQueryMicrophones(id) {
+
+    const adapter = getAdapter(id);
+
+    var cameras = await adapter.queryMicrophones();
+
+    return cameras.map(createAudioDevice)
+}
+
+export async function adapterQuerySpeakers(id) {
+
+    const adapter = getAdapter(id);
+
+    var cameras = await adapter.querySpeakers();
+
+    return cameras.map(createAudioDevice)
 }
 
 export async function adapterUnmute(id) {
@@ -121,6 +139,15 @@ function registerAdapter(id, adapter) {
     window.__posInfo_azure_comm_ui_blazor[id] = adapter;
 }
 
+function createAudioDevice(audioDevice) {
+    return {
+        name: audioDevice.name,
+        id: audioDevice.id,
+        isSystemDefault: audioDevice.isSystemDefault,
+        deviceType: audioDevice.deviceType,
+    };
+}
+
 function createRemoteParticipant(remoteParticipant) {
     return {
         identifier: remoteParticipant.identifier,
@@ -128,10 +155,10 @@ function createRemoteParticipant(remoteParticipant) {
     };
 }
 
-function createCameraDevice(cameraDevice) {
+function createVideoDevice(videoDevice) {
     return {
-        name: cameraDevice.name,
-        id: cameraDevice.id,
-        deviceType: cameraDevice.deviceType,
+        name: videoDevice.name,
+        id: videoDevice.id,
+        deviceType: videoDevice.deviceType,
     };
 }

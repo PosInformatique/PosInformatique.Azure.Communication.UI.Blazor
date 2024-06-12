@@ -64,6 +64,20 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         Task<IReadOnlyList<VideoDeviceInfo>> QueryCamerasAsync();
 
         /// <summary>
+        /// Query for available microphone devices.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous invocation which contains the microphone devices available.</returns>
+        /// <exception cref="ObjectDisposedException">If the <see cref="CallAdapter"/> has already been disposed.</exception>
+        Task<IReadOnlyList<AudioDeviceInfo>> QueryMicrophonesAsync();
+
+        /// <summary>
+        /// Query for available speakers devices.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous invocation which contains the speakers devices available.</returns>
+        /// <exception cref="ObjectDisposedException">If the <see cref="CallAdapter"/> has already been disposed.</exception>
+        Task<IReadOnlyList<AudioDeviceInfo>> QuerySpeakersAsync();
+
+        /// <summary>
         /// Start sharing the screen during a call.
         /// </summary>
         /// <returns>A <see cref="Task"/> that represents the asynchronous invocation.</returns>

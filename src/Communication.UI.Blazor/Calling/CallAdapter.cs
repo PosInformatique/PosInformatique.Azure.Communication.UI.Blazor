@@ -99,6 +99,22 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         }
 
         /// <inheritdoc />
+        public async Task<IReadOnlyList<AudioDeviceInfo>> QueryMicrophonesAsync()
+        {
+            ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
+
+            return await this.Module.InvokeAsync<IReadOnlyList<AudioDeviceInfo>>("adapterQueryMicrophones", this.Id);
+        }
+
+        /// <inheritdoc />
+        public async Task<IReadOnlyList<AudioDeviceInfo>> QuerySpeakersAsync()
+        {
+            ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
+
+            return await this.Module.InvokeAsync<IReadOnlyList<AudioDeviceInfo>>("adapterQuerySpeakers", this.Id);
+        }
+
+        /// <inheritdoc />
         public async ValueTask DisposeAsync()
         {
             if (this.callbackEvent != null)

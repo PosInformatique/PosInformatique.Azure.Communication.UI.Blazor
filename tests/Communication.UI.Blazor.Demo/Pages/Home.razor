@@ -71,6 +71,26 @@
     </select>
 </div>
 
+<div>
+    <label for="microphones">Available microphones:</label>
+    <select name="microphones" id="microphones">
+        @foreach (var microphone in this.microphones)
+        {
+            <option value="@microphone.Id">@microphone.Name (Id: @microphone.Id, Type: @microphone.DeviceType, IsSystemDefault: @microphone.IsSystemDefault)</option>
+        }
+    </select>
+</div>
+
+<div>
+    <label for="speakers">Available speakers:</label>
+    <select name="speakers" id="speakers">
+        @foreach (var speaker in this.speakers)
+        {
+            <option value="@speaker.Id">@speaker.Name (Id: @speaker.Id, Type: @speaker.DeviceType, IsSystemDefault: @speaker.IsSystemDefault)</option>
+        }
+    </select>
+</div>
+
 <CallComposite Adapter="this.callAdapter"
                CameraButton="@this.cameraButton"
                DevicesButton="@this.devicesButton"

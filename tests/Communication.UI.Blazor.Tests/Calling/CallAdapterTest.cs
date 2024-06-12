@@ -45,15 +45,27 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
                 .Should().ThrowExactlyAsync<ObjectDisposedException>()
                 .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
 
+            await callAdapter.Invoking(c => c.MuteAsync())
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
+
+            await callAdapter.Invoking(c => c.QueryCamerasAsync())
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
+
+            await callAdapter.Invoking(c => c.QueryMicrophonesAsync())
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
+
+            await callAdapter.Invoking(c => c.QuerySpeakersAsync())
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
+
             await callAdapter.Invoking(c => c.StartScreenShareAsync())
                 .Should().ThrowExactlyAsync<ObjectDisposedException>()
                 .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
 
             await callAdapter.Invoking(c => c.StopScreenShareAsync())
-                .Should().ThrowExactlyAsync<ObjectDisposedException>()
-                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
-
-            await callAdapter.Invoking(c => c.MuteAsync())
                 .Should().ThrowExactlyAsync<ObjectDisposedException>()
                 .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
 
@@ -257,6 +269,111 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
             adapter.Dispose();
 
             await adapter.Invoking(c => c.MuteAsync())
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
+        }
+
+        [Fact]
+        public async Task QueryCamerasAsync()
+        {
+            var devices = Array.Empty<VideoDeviceInfo>();
+
+            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
+            module.Setup(m => m.InvokeAsync<IReadOnlyList<VideoDeviceInfo>>("adapterQueryCameras", It.IsAny<object[]>()))
+                .Callback((string _, object[] a) =>
+                {
+                    a.Should().HaveCount(1);
+                    a[0].As<Guid>().Should().NotBeEmpty();
+                })
+                .ReturnsAsync(devices);
+
+            var adapter = new CallAdapter(module.Object);
+
+            var result = await adapter.QueryCamerasAsync();
+
+            result.Should().BeSameAs(devices);
+
+            module.VerifyAll();
+        }
+
+        [Fact]
+        public async Task QueryCamerasAsync_AlreadyDisposed()
+        {
+            var adapter = new CallAdapter(default);
+
+            adapter.Dispose();
+
+            await adapter.Invoking(c => c.QueryCamerasAsync())
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
+        }
+
+        [Fact]
+        public async Task QueryMicrophonesAsync()
+        {
+            var devices = Array.Empty<AudioDeviceInfo>();
+
+            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
+            module.Setup(m => m.InvokeAsync<IReadOnlyList<AudioDeviceInfo>>("adapterQueryMicrophones", It.IsAny<object[]>()))
+                .Callback((string _, object[] a) =>
+                {
+                    a.Should().HaveCount(1);
+                    a[0].As<Guid>().Should().NotBeEmpty();
+                })
+                .ReturnsAsync(devices);
+
+            var adapter = new CallAdapter(module.Object);
+
+            var result = await adapter.QueryMicrophonesAsync();
+
+            result.Should().BeSameAs(devices);
+
+            module.VerifyAll();
+        }
+
+        [Fact]
+        public async Task QueryMicrophonesAsync_AlreadyDisposed()
+        {
+            var adapter = new CallAdapter(default);
+
+            adapter.Dispose();
+
+            await adapter.Invoking(c => c.QueryMicrophonesAsync())
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
+        }
+
+        [Fact]
+        public async Task QuerySpeakersAsync()
+        {
+            var devices = Array.Empty<AudioDeviceInfo>();
+
+            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
+            module.Setup(m => m.InvokeAsync<IReadOnlyList<AudioDeviceInfo>>("adapterQuerySpeakers", It.IsAny<object[]>()))
+                .Callback((string _, object[] a) =>
+                {
+                    a.Should().HaveCount(1);
+                    a[0].As<Guid>().Should().NotBeEmpty();
+                })
+                .ReturnsAsync(devices);
+
+            var adapter = new CallAdapter(module.Object);
+
+            var result = await adapter.QuerySpeakersAsync();
+
+            result.Should().BeSameAs(devices);
+
+            module.VerifyAll();
+        }
+
+        [Fact]
+        public async Task QuerySpeakersAsync_AlreadyDisposed()
+        {
+            var adapter = new CallAdapter(default);
+
+            adapter.Dispose();
+
+            await adapter.Invoking(c => c.QuerySpeakersAsync())
                 .Should().ThrowExactlyAsync<ObjectDisposedException>()
                 .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
         }

@@ -95,6 +95,11 @@ To unmute the microphone of the current user, call the `UnmuteAsync()` method on
 ### Gets available cameras
 To retrieve the list of available camera call the `QueryCamerasAsync()` method.
 
+### Gets available microphones / speakers
+To retrieve the list of available microphones call the `QueryMicrophonesAsync()` method.
+
+To retrieve the list of available speakers call the `QuerySpeakersAsync()` method.
+
 ### Events
 You can subsribe to the following asynchronous events using a standard delegate method:
 - `OnCallEnded`: Occurs then the call is ended.
