@@ -17,6 +17,14 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
         }
 
         [Fact]
+        public void ToString_Test()
+        {
+            var user = new CommunicationUserKind("The id");
+
+            user.CommunicationUserId.ToString().Should().Be("The id");
+        }
+
+        [Fact]
         public void Serialization()
         {
             var user = new CommunicationUserKind("The id");

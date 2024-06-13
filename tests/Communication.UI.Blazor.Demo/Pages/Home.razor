@@ -63,6 +63,8 @@
 
     <button @onclick="this.LowerHandAsync" disabled="@(this.callAdapter is null)">Lower hand</button>
     <button @onclick="this.RaiseHandAsync" disabled="@(this.callAdapter is null)">Raise hand</button>
+
+    <button @onclick="this.RefreshStateAsync" disabled="@(this.callAdapter is null)">Refresh state</button>
 </div>
 <div>
     <label for="cameras">Available cameras:</label>
@@ -93,6 +95,22 @@
         }
     </select>
 </div>
+
+@if (this.currentState is not null)
+{
+    <div>
+        State:
+        <ul>
+            <li>CameraStatus: @this.currentState.CameraStatus</li>
+            <li>DisplayName: @this.currentState.DisplayName</li>
+            <li>IsLocalPreviewMicrophoneEnabled: @this.currentState.IsLocalPreviewMicrophoneEnabled</li>
+            <li>IsRoomsCall: @this.currentState.IsRoomsCall</li>
+            <li>IsTeamsCall: @this.currentState.IsTeamsCall</li>
+            <li>Page: @this.currentState.Page</li>
+            <li>UserId: @this.currentState.UserId</li>
+        </ul>
+    </div>
+}
 
 <CallComposite Adapter="this.callAdapter"
                CameraButton="@this.cameraButton"

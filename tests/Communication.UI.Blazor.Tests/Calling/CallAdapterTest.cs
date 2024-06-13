@@ -37,6 +37,10 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
 
             await callAdapter.DisposeAsync();
 
+            await callAdapter.Invoking(c => c.GetStateAsync())
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
+
             await callAdapter.Invoking(c => c.JoinCallAsync(default))
                 .Should().ThrowExactlyAsync<ObjectDisposedException>()
                 .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
@@ -82,6 +86,45 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
                 .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
 
             module.VerifyAll();
+        }
+
+        [Fact]
+        public async Task GetStateAsync()
+        {
+            Guid adapterId = default;
+
+            var state = new CallAdapterState(default);
+
+            var module = new Mock<IJSObjectReference>(MockBehavior.Strict);
+            module.Setup(m => m.InvokeAsync<CallAdapterState>("adapterGetState", It.IsAny<object[]>()))
+                .Callback((string _, object[] a) =>
+                {
+                    a.Should().HaveCount(1);
+
+                    adapterId = a[0].As<Guid>();
+                })
+                .ReturnsAsync(state);
+
+            var adapter = new CallAdapter(module.Object);
+
+            var result = await adapter.GetStateAsync();
+
+            adapterId.Should().Be(adapter.Id);
+            result.Should().BeSameAs(state);
+
+            module.VerifyAll();
+        }
+
+        [Fact]
+        public async Task GetStateAsync_AlreadyDisposed()
+        {
+            var adapter = new CallAdapter(default);
+
+            adapter.Dispose();
+
+            await adapter.Invoking(c => c.GetStateAsync())
+                .Should().ThrowExactlyAsync<ObjectDisposedException>()
+                .WithMessage("Cannot access a disposed object.\r\nObject name: 'PosInformatique.Azure.Communication.UI.Blazor.CallAdapter'.");
         }
 
         [Fact]
@@ -183,6 +226,22 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Tests
             callBackReference.Invoke("OnParticipantsLeftAsync", [removedParticipant]);
 
             count.Should().Be(2);
+
+            // Check the OnStateChangedAsync event
+            var state = new CallAdapterState(default);
+            var onStateChangedCalled = false;
+
+            adapter.OnStateChanged += new AsyncEventHandler<StateChangedEvent>(e =>
+            {
+                e.State.Should().BeSameAs(state);
+                onStateChangedCalled = true;
+
+                return Task.CompletedTask;
+            });
+
+            callBackReference.Invoke("OnStateChangedAsync", state);
+
+            onStateChangedCalled.Should().BeTrue();
 
             module.VerifyAll();
         }

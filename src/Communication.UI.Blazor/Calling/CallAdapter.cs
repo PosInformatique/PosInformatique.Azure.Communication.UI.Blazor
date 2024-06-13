@@ -38,9 +38,41 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         /// <inheritdoc />
         public event AsyncEventHandler<RemoteParticipantLeftEvent>? OnParticipantLeft;
 
+        /// <inheritdoc />
+        public event AsyncEventHandler<StateChangedEvent>? OnStateChanged;
+
         internal Guid Id { get; }
 
         internal IJSObjectReference Module { get; }
+
+        /// <inheritdoc />
+        public void Dispose()
+        {
+            if (this.callbackEvent != null)
+            {
+                this.callbackEvent.Dispose();
+                this.callbackEvent = null;
+            }
+        }
+
+        /// <inheritdoc />
+        public async ValueTask DisposeAsync()
+        {
+            if (this.callbackEvent != null)
+            {
+                await this.Module.InvokeVoidAsync("dispose", this.Id);
+            }
+
+            this.Dispose();
+        }
+
+        /// <inheritdoc />
+        public async Task<CallAdapterState> GetStateAsync()
+        {
+            ObjectDisposedException.ThrowIf(this.callbackEvent is null, this);
+
+            return await this.Module.InvokeAsync<CallAdapterState>("adapterGetState", this.Id);
+        }
 
         /// <inheritdoc />
         public async Task JoinCallAsync(JoinCallOptions options)
@@ -130,27 +162,6 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
             await this.Module.InvokeVoidAsync("adapterUnmute", this.Id);
         }
 
-        /// <inheritdoc />
-        public async ValueTask DisposeAsync()
-        {
-            if (this.callbackEvent != null)
-            {
-                await this.Module.InvokeVoidAsync("dispose", this.Id);
-            }
-
-            this.Dispose();
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            if (this.callbackEvent != null)
-            {
-                this.callbackEvent.Dispose();
-                this.callbackEvent = null;
-            }
-        }
-
         internal async Task InitializeAsync(CallAdapterArgs args)
         {
             await this.Module.InvokeVoidAsync("createCallAdapter", this.Id, args, this.callbackEvent!.Reference);
@@ -216,6 +227,15 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
                     {
                         await this.owner.OnParticipantLeft(new RemoteParticipantLeftEvent(participant));
                     }
+                }
+            }
+
+            [JSInvokable]
+            public async Task OnStateChangedAsync(CallAdapterState state)
+            {
+                if (this.owner.OnStateChanged is not null)
+                {
+                    await this.owner.OnStateChanged(new StateChangedEvent(state));
                 }
             }
         }

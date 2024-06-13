@@ -10,9 +10,9 @@ which has been ported to this library.
 
 | Method                        | Available  | Remarks                                              |
 |-------------------------------|------------|------------------------------------------------------|
-| onStateChange                 | TODO       |                                                      |
-| offStateChange                | TODO       |                                                      |
-| getState                      | TODO       |                                                      |
+| onStateChange                 | **Done**   |                                                      |
+| offStateChange                | **Done**   |                                                      |
+| getState                      | Partially  | Need to fully wrap the CallAdapterState object       |
 | dispose                       | **Done**   |                                                      |
 | holdCall (Beta)               | No         | Currently in beta in Microsoft library               |
 | joinCall (Deprecated)         | No         | Deprecated                                           |
@@ -68,3 +68,29 @@ which has been ported to this library.
 | transferAccepted                  | TODO      |         |
 | capabilitiesChanged               | TODO      |         |
 | spotlightChanged                  | TODO      |         |
+
+
+### CallAdapterState
+| Name                                 | Available | Remarks |
+|--------------------------------------|-----------|---------|
+| userId                               | **Done**  |         |
+| displayName                          | **Done**  |         |
+| call                                 | TODO      |         |
+| targetCallees                        | TODO      |         |
+| devices                              | TODO      |         |
+| endedCall                            | TODO      |         |
+| isTeamsCall                          | **Done**  |         |
+| isRoomsCall                          | **Done**  |         |
+| latestErrors                         | TODO      |         |
+| alternateCallerId                    | TODO      |         |
+| environmentInfo                      | TODO      |         |
+| cameraStatus                         | **Done**  |         |
+| videoBackgroundImages                | TODO      |         |
+| onResolveVideoEffectDependency       | TODO      |         |
+| selectedVideoBackgroundEffect        | TODO      |         |
+| acceptedTransferCallState            | TODO      |         |
+| hideAttendeeNames                    | TODO      |         |
+| sounds                               | TODO      |         |
+| isLocalPreviewMicrophoneEnabled      | **Done**  |         |
+| page                                 | **Done**  |         |
+| unsupportedBrowserVersionsAllowed    | TODO      |         |

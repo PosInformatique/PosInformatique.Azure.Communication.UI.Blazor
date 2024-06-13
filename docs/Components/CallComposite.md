@@ -105,12 +105,19 @@ To raise the hand during a call, call the `RaiseHandAsync()` method.
 
 To lower the hand during a call, call the `LowerHandAsync()` method.
 
+### Gets the state of the CallAdapter
+To retrieve the current state of the `CallAdapter`, call the `GetStateAsync()` method.
+
+You can also subscribe to the `OnStateChanged` event which is raised when the state of the `CallAdapter` is changed.
+
 ### Events
 You can subsribe to the following asynchronous events using a standard delegate method:
 - `OnCallEnded`: Occurs then the call is ended.
 - `OnMicrophoneMuteChanged`: Occurs when the microphone of a participant is mute/unmute.
 - `OnParticipantJoined`: Occurs when a participant join the call.
 - `OnParticipantLeft`: Occurs when a participant leave the call.
+- `OnStateChanged`: Occurs when the `CallAdapterState` has been changed.
+  You can also call manually the `GetStateAsync()` method to retrieve the last state of the `CallAdapter`
 
 ### Dispose the resources
 It is recommanded to implement the `IAsyncDisposable` method in the class which create

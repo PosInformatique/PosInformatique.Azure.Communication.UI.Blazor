@@ -34,6 +34,18 @@ namespace PosInformatique.Azure.Communication.UI.Blazor
         event AsyncEventHandler<RemoteParticipantLeftEvent>? OnParticipantLeft;
 
         /// <summary>
+        /// Occurs when the state of the <see cref="CallAdapter"/> has been changed.
+        /// </summary>
+        event AsyncEventHandler<StateChangedEvent>? OnStateChanged;
+
+        /// <summary>
+        /// Get the current state of the <see cref="CallAdapter"/>.
+        /// </summary>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous invocation which contains the <see cref="CallAdapterState"/>.</returns>
+        /// <exception cref="ObjectDisposedException">If the <see cref="ICallAdapter"/> has already been disposed.</exception>
+        Task<CallAdapterState> GetStateAsync();
+
+        /// <summary>
         /// Join an existing call.
         /// </summary>
         /// <param name="options">Options of the call.</param>

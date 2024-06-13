@@ -39,6 +39,8 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
 
         private bool leaveCallForEveryone;
 
+        private CallAdapterState? currentState;
+
         public Home()
         {
             this.userId = string.Empty;
@@ -132,6 +134,7 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
             this.callAdapter.OnMicrophoneMuteChanged += this.OnMicrophoneMuteChanged;
             this.callAdapter.OnParticipantJoined += this.OnParticipantJoined;
             this.callAdapter.OnParticipantLeft += this.OnParticipantLeft;
+            this.callAdapter.OnStateChanged += this.OnStateChanged;
 
             this.cameras = await this.callAdapter.QueryCamerasAsync();
             this.microphones = await this.callAdapter.QueryMicrophonesAsync();
@@ -156,6 +159,11 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
         private async Task RaiseHandAsync()
         {
             await this.callAdapter!.RaiseHandAsync();
+        }
+
+        private async Task RefreshStateAsync()
+        {
+            this.currentState = await this.callAdapter!.GetStateAsync();
         }
 
         private async Task StartScreenShareAsync()
@@ -208,6 +216,15 @@ namespace PosInformatique.Azure.Communication.UI.Blazor.Demo.Pages
         private async Task OnParticipantLeft(RemoteParticipantLeftEvent @event)
         {
             this.Log("OnParticipantLeft", $"{@event.Participant.DisplayName} has left the call. (ID: {@event.Participant.Identifier.CommunicationUserId})");
+
+            await Task.CompletedTask;
+        }
+
+        private async Task OnStateChanged(StateChangedEvent @event)
+        {
+            this.currentState = @event.State;
+
+            this.Log("OnStateChanged", $"The state has been changed.");
 
             await Task.CompletedTask;
         }

@@ -36,6 +36,11 @@ export async function createCallAdapter(id, args, eventCallback) {
         return eventCallback.invokeMethodAsync('OnParticipantsLeftAsync', event.removed.map(createRemoteParticipant));
     });
 
+    adapter.onStateChange((state) => {
+        console.log(state);
+        return eventCallback.invokeMethodAsync('OnStateChangedAsync', createState(state));
+    });
+
     registerAdapter(id, adapter);
 }
 
@@ -46,6 +51,13 @@ export function initializeControl(divElement, adapterId, callControls) {
     var element = createElement(CallComposite, { options: { callControls: callControls }, adapter: adapter }, null);
 
     createRoot(divElement).render(element);
+}
+
+export function adapterGetState(id) {
+
+    const adapter = getAdapter(id);
+
+    return createState(adapter.getState());
 }
 
 export function adapterJoinCall(id, options) {
@@ -166,6 +178,18 @@ function createRemoteParticipant(remoteParticipant) {
     return {
         identifier: remoteParticipant.identifier,
         displayName: remoteParticipant.displayName,
+    };
+}
+
+function createState(state) {
+    return {
+        cameraStatus: state.cameraStatus,
+        displayName: state.displayName,
+        isLocalPreviewMicrophoneEnabled: state.isLocalPreviewMicrophoneEnabled,
+        isRoomsCall: state.isRoomsCall,
+        isTeamsCall: state.isTeamsCall,
+        page: state.page,
+        userId: state.userId,
     };
 }
 
