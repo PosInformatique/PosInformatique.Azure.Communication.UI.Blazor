@@ -5,7 +5,7 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Communication.UI.Blazor", "src\Communication.UI.Blazor\Communication.UI.Blazor.csproj", "{80D7D289-D75C-4D90-A7EA-3BC798447F0F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{73E898B6-D134-41AC-AB6A-31080EB3BD8D}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{73E898B6-D134-41AC-AB6A-31080EB3BD8D}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 		.gitignore = .gitignore
