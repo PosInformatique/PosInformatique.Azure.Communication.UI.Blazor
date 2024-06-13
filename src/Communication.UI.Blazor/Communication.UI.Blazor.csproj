@@ -47,11 +47,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AdditionalFiles Remove="..\..\stylecop.json" />
-    <AdditionalFiles Include="stylecop.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" />
   </ItemGroup>
 
@@ -64,9 +59,11 @@
   <ItemGroup>
     <Content Update="AzureCommunicationReact\package-lock.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>false</Pack>
     </Content>
     <Content Update="AzureCommunicationReact\package.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>false</Pack>
     </Content>
   </ItemGroup>
 
