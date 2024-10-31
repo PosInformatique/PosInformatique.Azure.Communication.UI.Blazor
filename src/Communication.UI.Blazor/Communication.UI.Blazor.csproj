@@ -11,6 +11,9 @@
     <PackageProjectUrl>https://github.com/PosInformatique/PosInformatique.Azure.Communication.UI.Blazor</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageReleaseNotes>
+      1.1.1
+      - Remove not used files in the NuGet package.
+      
       1.1.0
       - Refactoring to separate the CallAdapter and the CallComposite to reflect the architecture of the Communication UI Library.
         This refactoring required now a service which will let the developer to create the CallAdapter.
@@ -47,11 +50,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <AdditionalFiles Remove="..\..\stylecop.json" />
-    <AdditionalFiles Include="stylecop.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" />
   </ItemGroup>
 
@@ -64,9 +62,11 @@
   <ItemGroup>
     <Content Update="AzureCommunicationReact\package-lock.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>false</Pack>
     </Content>
     <Content Update="AzureCommunicationReact\package.json">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <Pack>false</Pack>
     </Content>
   </ItemGroup>
 
